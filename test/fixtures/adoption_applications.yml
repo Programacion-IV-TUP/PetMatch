@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  housing_type: MyString
+  has_another_pet: false
+  notes: MyText
+  status: MyString
+  pet: one
+  user: one
+
+two:
+  housing_type: MyString
+  has_another_pet: false
+  notes: MyText
+  status: MyString
+  pet: two
+  user: two

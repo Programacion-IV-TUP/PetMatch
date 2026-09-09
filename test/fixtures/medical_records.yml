@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  applied_at: 2026-09-09
+  notes: MyText
+  next_due_date: 2026-09-09
+  pet: one
+
+two:
+  title: MyString
+  applied_at: 2026-09-09
+  notes: MyText
+  next_due_date: 2026-09-09
+  pet: two
