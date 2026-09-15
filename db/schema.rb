@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_09_200822) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_013053) do
   create_table "addresses", force: :cascade do |t|
     t.string "apartment"
     t.integer "city_id", null: false
@@ -105,8 +105,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_200822) do
     t.string "phone"
     t.string "role"
     t.string "second_name"
+    t.integer "shelter_id"
     t.datetime "updated_at", null: false
     t.index ["address_id"], name: "index_users_on_address_id"
+    t.index ["shelter_id"], name: "index_users_on_shelter_id"
   end
 
   add_foreign_key "addresses", "cities"
@@ -119,4 +121,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_09_200822) do
   add_foreign_key "pets", "shelters"
   add_foreign_key "shelters", "addresses"
   add_foreign_key "users", "addresses"
+  add_foreign_key "users", "shelters"
 end
