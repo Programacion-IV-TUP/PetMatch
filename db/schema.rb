@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_15_013053) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_210132) do
   create_table "addresses", force: :cascade do |t|
     t.string "apartment"
     t.integer "city_id", null: false
@@ -85,6 +85,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_013053) do
     t.index ["shelter_id"], name: "index_pets_on_shelter_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
   create_table "shelters", force: :cascade do |t|
     t.integer "address_id", null: false
     t.datetime "created_at", null: false
@@ -99,15 +108,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_013053) do
   create_table "users", force: :cascade do |t|
     t.integer "address_id", null: false
     t.datetime "created_at", null: false
-    t.string "email"
-    t.string "first_name"
-    t.string "password_digest"
+    t.string "email", null: false
+    t.string "first_name", null: false
+    t.string "password_digest", null: false
     t.string "phone"
-    t.string "role"
-    t.string "second_name"
+    t.string "role", default: "adopter", null: false
+    t.string "second_name", null: false
     t.integer "shelter_id"
     t.datetime "updated_at", null: false
     t.index ["address_id"], name: "index_users_on_address_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["shelter_id"], name: "index_users_on_shelter_id"
   end
 
@@ -119,6 +129,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_013053) do
   add_foreign_key "medical_records", "pets"
   add_foreign_key "pets", "breeds"
   add_foreign_key "pets", "shelters"
+  add_foreign_key "sessions", "users"
   add_foreign_key "shelters", "addresses"
   add_foreign_key "users", "addresses"
   add_foreign_key "users", "shelters"
