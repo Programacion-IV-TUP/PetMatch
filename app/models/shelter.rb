@@ -4,6 +4,7 @@ class Shelter < ApplicationRecord
   has_many :users
   has_many :pets, dependent: :destroy
   has_many :adoption_applications, through: :pets
+  has_many :medical_records, through: :pets
 
   validates :name, precense: true
   validates :email, precense: true

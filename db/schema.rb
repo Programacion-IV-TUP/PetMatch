@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_15_210132) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_16_000606) do
   create_table "addresses", force: :cascade do |t|
     t.string "apartment"
     t.integer "city_id", null: false
@@ -64,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_210132) do
     t.date "next_due_date"
     t.text "notes"
     t.integer "pet_id", null: false
+    t.string "record_type"
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["pet_id"], name: "index_medical_records_on_pet_id"
