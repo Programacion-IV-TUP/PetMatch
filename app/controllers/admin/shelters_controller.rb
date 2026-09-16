@@ -1,6 +1,6 @@
 module Admin
   class SheltersController < ApplicationController
-    before_action :ensure_admin!
+    before_action :ensure_global_admin!
     before_action :set_shelter, only: %i[show edit update destroy]
 
     def index
@@ -35,10 +35,6 @@ module Admin
     end
 
     private
-
-    def ensure_admin!
-      redirect_to admin_root_path, alert: t("errors.unauthorized") unless current_user.admin?
-    end
 
     def set_shelter
       @shelter = Shelter.find(params[:id])

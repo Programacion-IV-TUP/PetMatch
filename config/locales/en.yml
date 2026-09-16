@@ -4,15 +4,25 @@ en:
   # ==========================================
   errors:
     unauthorized: "You are not authorized to perform this action."
+    has_dependencies: "Cannot delete record because it has associated data."
+
   # ==========================================
   # 2. MODELS AND ATTRIBUTES TRANSLATIONS
   # ==========================================
   activerecord:
+    errors:
+      messages:
+        restrict_dependent_destroy:
+          has_one: "Cannot delete record because a dependent %{record} exists."
+          has_many: "Cannot delete record because dependent %{record} exist."
+          
     models:
       pet: "Pet"
       adoption_application: "Adoption Application"
       medical_record: "Medical Record"
       shelter: "Shelter"
+      city: "City"
+      breed: "Breed"
 
     attributes:
       pet:
@@ -38,6 +48,13 @@ en:
         description: "Description / Notes"
         applied_at: "Date Administered"
         next_due_at: "Next Due Date"
+
+      city:
+        name: "Name"
+
+      breed:
+        name: "Name"
+        species: "Species"
 
       # ------------------------------------------
       # Translated values for ENUMs
@@ -93,6 +110,22 @@ en:
         success: "Shelter successfully updated."
       destroy:
         success: "Shelter deleted."
+
+    cities:
+      create:
+        success: "City created successfully."
+      update:
+        success: "City updated successfully."
+      destroy:
+        success: "City removed successfully."
+        
+    breeds:
+      create:
+        success: "Breed created successfully."
+      update:
+        success: "Breed updated successfully."
+      destroy:
+        success: "Breed removed successfully."
 
   # ==========================================
   # 4. GENERIC VIEW HELPERS

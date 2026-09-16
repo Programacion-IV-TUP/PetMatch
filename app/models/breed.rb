@@ -1,6 +1,6 @@
 class Breed < ApplicationRecord
-    has_many :pets
-    
-    validates :name, precense: true
-    validates :species, precense: true
+    has_many :pets, dependent: :restrict_with_error
+
+    validates :name, presence: true, uniqueness: { case_sensitive: false }
+    validates :species, presence: true
 end

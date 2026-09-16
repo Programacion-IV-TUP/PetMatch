@@ -14,19 +14,13 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "pets#index"
 
-    # Refugios (CRUD completo para Admin Global)
     resources :shelters
-
-    # Solicitudes de Adopción (Revisión y actualización de estado)
+    resources :cities, except: %i[show]
+    resources :breeds, except: %i[show]
     resources :adoption_applications, only: %i[index show edit update]
-
-    # Mascotas y su ruteo anidado
     resources :pets do
-      # Ruta anidada únicamente para crear registros médicos en el contexto de una mascota
       resources :medical_records, only: %i[new create]
     end
-
-    # Registros médicos independientes (Listar, ver, editar, actualizar, eliminar)
     resources :medical_records, only: %i[index show edit update destroy]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -4,15 +4,24 @@ es:
   # ==========================================
   errors:
     unauthorized: "No tienes permisos para realizar esta acción."
+    has_dependencies: "No se puede eliminar el registro porque tiene datos asociados."
   # ==========================================
   # 2. TRADUCCIONES DE MODELOS Y ATRIBUTOS
   # ==========================================
   activerecord:
+    errors:
+      messages:
+        restrict_dependent_destroy:
+          has_one: "No se puede eliminar el registro porque existe un %{record} dependiente."
+          has_many: "No se puede eliminar el registro porque existen %{record} dependientes."
+
     models:
       pet: "Mascota"
       adoption_application: "Solicitud de Adopción"
       medical_record: "Registro Médico"
       shelter: "Refugio"
+      city: "Ciudad"
+      breed: "Raza"
 
     attributes:
       pet:
@@ -38,6 +47,13 @@ es:
         description: "Descripción / Observaciones"
         applied_at: "Fecha de aplicación"
         next_due_at: "Próxima aplicación"
+
+      city:
+        name: "Nombre"
+
+      breed:
+        name: "Nombre"
+        species: "Especie"
 
       # ------------------------------------------
       # Valores traducidos para los ENUMs
@@ -93,6 +109,22 @@ es:
         success: "Refugio actualizado exitosamente."
       destroy:
         success: "Refugio eliminado."
+
+    cities:
+      create:
+        success: "Ciudad creada correctamente."
+      update:
+        success: "Ciudad actualizada correctamente."
+      destroy:
+        success: "Ciudad eliminada del sistema."
+
+    breeds:
+      create:
+        success: "Raza creada correctamente."
+      update:
+        success: "Raza actualizada correctamente."
+      destroy:
+        success: "Raza eliminada del sistema."
       
 
   # ==========================================
