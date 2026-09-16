@@ -11,7 +11,7 @@ module Admin
 
     def update
       if @application.update(application_params)
-        redirect_to admin_adoption_application_path(@application), notice: "Estado de la solicitud actualizado correctamente."
+        redirect_to admin_adoption_application_path(@application), notice: t(".success")
       else
         render :show, status: :unprocessable_entity
       end

@@ -20,7 +20,7 @@ module Admin
       @pet = scoped_pets.build(pet_params)
 
       if @pet.save
-        redirect_to admin_pet_path(@pet), notice: "Mascota creada correctamente."
+        redirect_to admin_pet_path(@pet), notice: t(".success")
       else
         render :new, status: :unprocessable_entity
       end
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @pet.update(pet_params)
-        redirect_to admin_pet_path(@pet), notice: "Mascota actualizada."
+        redirect_to admin_pet_path(@pet), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -36,7 +36,7 @@ module Admin
 
     def destroy
       @pet.destroy
-      redirect_to admin_pets_path, notice: "Mascota eliminada del sistema."
+      redirect_to admin_pets_path, notice: t(".success")
     end
 
     private

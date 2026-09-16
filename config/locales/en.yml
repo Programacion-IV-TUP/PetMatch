@@ -1,31 +1,105 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  # ==========================================
+  # 1. ERRORS TRANSLATIONS
+  # ==========================================
+  errors:
+    unauthorized: "You are not authorized to perform this action."
+  # ==========================================
+  # 2. MODELS AND ATTRIBUTES TRANSLATIONS
+  # ==========================================
+  activerecord:
+    models:
+      pet: "Pet"
+      adoption_application: "Adoption Application"
+      medical_record: "Medical Record"
+      shelter: "Shelter"
+
+    attributes:
+      pet:
+        name: "Name"
+        age_months: "Age (months)"
+        gender: "Gender"
+        size: "Size"
+        weight: "Weight (kg)"
+        description: "Description"
+        status: "Status"
+        breed: "Breed"
+        shelter: "Shelter"
+      
+      adoption_application:
+        status: "Application Status"
+        notes: "Internal Follow-up Notes"
+        user: "Applicant"
+        pet: "Pet"
+      
+      medical_record:
+        record_type: "Record Type"
+        title: "Title / Diagnosis"
+        description: "Description / Notes"
+        applied_at: "Date Administered"
+        next_due_at: "Next Due Date"
+
+      # ------------------------------------------
+      # Translated values for ENUMs
+      # ------------------------------------------
+      pet/status:
+        available: "Available"
+        in_process: "In Process"
+        adopted: "Adopted"
+
+      adoption_application/status:
+        pending: "Pending"
+        under_review: "Under Review"
+        approved: "Approved"
+        rejected: "Rejected"
+        cancelled: "Cancelled"
+
+      medical_record/record_type:
+        vaccine: "Vaccine"
+        deworming: "Deworming"
+        surgery: "Surgery"
+        checkup: "Routine Checkup"
+        treatment: "Treatment"
+
+  # ==========================================
+  # 3. CONTROLLER MESSAGES (Flash / Notice)
+  # Uses Lazy Lookup: t(".success")
+  # ==========================================
+  admin:
+    pets:
+      create:
+        success: "Pet successfully created."
+      update:
+        success: "Pet successfully updated."
+      destroy:
+        success: "Pet removed from system."
+
+    adoption_applications:
+      update:
+        success: "Application status successfully updated."
+
+    medical_records:
+      create:
+        success: "Medical record successfully logged."
+      update:
+        success: "Medical record successfully updated."
+      destroy:
+        success: "Medical record deleted."
+
+    shelters:
+      create:
+        success: "Shelter successfully created."
+      update:
+        success: "Shelter successfully updated."
+      destroy:
+        success: "Shelter deleted."
+
+  # ==========================================
+  # 4. GENERIC VIEW HELPERS
+  # ==========================================
+  helpers:
+    select:
+      prompt: "Select an option..."
+    submit:
+      create: "Save %{model}"
+      update: "Update %{model}"

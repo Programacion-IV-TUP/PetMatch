@@ -15,7 +15,7 @@ module Admin
       @medical_record = @pet.medical_records.build(medical_record_params)
 
       if @medical_record.save
-        redirect_to admin_pet_path(@pet), notice: "Registro médico cargado exitosamente."
+        redirect_to admin_pet_path(@pet), notice: t(".success")
       else
         render :new, status: :unprocessable_entity
       end
@@ -23,7 +23,7 @@ module Admin
 
     def update
       if @medical_record.update(medical_record_params)
-        redirect_to admin_pet_path(@medical_record.pet), notice: "Registro médico actualizado exitosamente."
+        redirect_to admin_pet_path(@medical_record.pet), notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -32,7 +32,7 @@ module Admin
     def destroy
       pet = @medical_record.pet
       @medical_record.destroy
-      redirect_to admin_pet_path(pet), notice: "Registro médico eliminado."
+      redirect_to admin_pet_path(pet), notice: t(".success")
     end
 
     private
