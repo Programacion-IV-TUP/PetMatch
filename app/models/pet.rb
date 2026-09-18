@@ -16,4 +16,17 @@ class Pet < ApplicationRecord
   validates :gender, presence: true
   validates :age_months, presence: true
   validates :size, presence: true
+  validate :photos_count_limit
+
+  private
+
+  MAX_PHOTOS = 5
+
+  def photos_count_limit
+    return unless photos.attached?
+
+    if photos.size > MAX_PHOTOS
+      errors.add(:photos, "no pueden ser más de #{MAX_PHOTOS}")
+    end
+  end
 end

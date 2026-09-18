@@ -36,3 +36,7 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Excluir gemas locales instaladas en el proyecto
+/vendor/bundle/
+/.bundle/
