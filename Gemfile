@@ -5,6 +5,8 @@ gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 
 gem "json", "~> 2.8"
 
+gem "tailwindcss-rails"
+
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record

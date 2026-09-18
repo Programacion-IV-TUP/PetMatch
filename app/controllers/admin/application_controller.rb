@@ -2,6 +2,7 @@ module Admin
   class ApplicationController < ::ApplicationController
     # require_authentication ya viene heredado desde ApplicationController
     before_action :require_admin_access
+    layout "admin"
 
     private
 
