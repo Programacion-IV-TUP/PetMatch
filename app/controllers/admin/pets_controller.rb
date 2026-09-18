@@ -45,7 +45,7 @@ module Admin
     # - Admins get access to all pets.
     # - Shelter managers are scoped exclusively to their assigned shelter.
     def scoped_pets
-      current_user.super_admin? ? Pet.all : current_shelter.pets
+      current_user.admin? ? Pet.all : current_shelter.pets
     end
 
     # Finds a pet within the user's scope

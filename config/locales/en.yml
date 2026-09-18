@@ -51,6 +51,7 @@ en:
 
       city:
         name: "Name"
+        state: "State"
 
       breed:
         name: "Name"

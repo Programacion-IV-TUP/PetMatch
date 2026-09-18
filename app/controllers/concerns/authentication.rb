@@ -18,7 +18,9 @@ module Authentication
     end
 
     def require_authentication
-      resume_session || request_authentication
+      unless resume_session
+        request_authentication
+      end
     end
 
     def resume_session

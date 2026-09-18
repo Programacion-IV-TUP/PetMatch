@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: "admin/pets#index"
   resource :session
   resources :passwords, param: :token
   namespace :api do

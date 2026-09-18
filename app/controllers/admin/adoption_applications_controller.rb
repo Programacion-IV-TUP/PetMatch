@@ -1,6 +1,6 @@
 module Admin
   class AdoptionApplicationsController < ApplicationController
-    before_actions :set_application, only: %i[show update]
+    before_action :set_application, only: %i[show update]
 
     def index
       @adoption_applications = scoped_applications.includes(:pet, :user).order(created_at: :desc)

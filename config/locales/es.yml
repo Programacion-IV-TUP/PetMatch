@@ -50,6 +50,7 @@ es:
 
       city:
         name: "Nombre"
+        state: "Provincia"
 
       breed:
         name: "Nombre"

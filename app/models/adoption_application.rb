@@ -1,7 +1,7 @@
 class AdoptionApplication < ApplicationRecord
   belongs_to :pet
   belongs_to :user
-  
+
   enum :status, {
     pending: "pending",
     under_review: "under_review",
@@ -10,7 +10,7 @@ class AdoptionApplication < ApplicationRecord
     cancelled: "cancelled"
   }, default: "pending"
 
-  validates :has_another_pet, precense: true
-  validates :housing_type, precense: true
-  validates :status, precense:true
+  validates :has_another_pet, inclusion: { in: [ true, false ] }
+  validates :housing_type, presence: true
+  validates :status, presence: true
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_000606) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_16_211121) do
   create_table "addresses", force: :cascade do |t|
     t.string "apartment"
     t.integer "city_id", null: false
@@ -46,6 +46,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_000606) do
   create_table "cities", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.string "state"
     t.datetime "updated_at", null: false
   end
 
@@ -109,7 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_000606) do
   create_table "users", force: :cascade do |t|
     t.integer "address_id", null: false
     t.datetime "created_at", null: false
-    t.string "email", null: false
+    t.string "email_address", null: false
     t.string "first_name", null: false
     t.string "password_digest", null: false
     t.string "phone"
@@ -118,7 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_000606) do
     t.integer "shelter_id"
     t.datetime "updated_at", null: false
     t.index ["address_id"], name: "index_users_on_address_id"
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["shelter_id"], name: "index_users_on_shelter_id"
   end
 

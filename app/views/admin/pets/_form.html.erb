@@ -1,0 +1,38 @@
+<%= form_with(model: [:admin, pet], class: "bg-white p-6 rounded shadow max-w-lg space-y-4") do |f| %>
+  <div>
+    <%= f.label :name, "Nombre", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :name, class: "mt-1 w-full border rounded p-2" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :gender, "Género", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :gender, [["Macho", "male"], ["Hembra", "female"]], {}, class: "mt-1 w-full border rounded p-2" %>
+    </div>
+    <div>
+      <%= f.label :size, "Tamaño", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :size, [["Chico", "small"], ["Mediano", "medium"], ["Grande", "large"]], {}, class: "mt-1 w-full border rounded p-2" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= f.label :age_months, "Edad (meses)", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :age_months, class: "mt-1 w-full border rounded p-2" %>
+    </div>
+    <div>
+      <%= f.label :breed_id, "Raza", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :breed_id, Breed.all, :id, :name, {}, class: "mt-1 w-full border rounded p-2" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :status, "Estado", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.select :status, Pet.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "mt-1 w-full border rounded p-2" %>
+  </div>
+
+  <div class="pt-4 flex justify-end space-x-2">
+    <%= link_to "Cancelar", admin_pets_path, class: "px-4 py-2 border rounded text-gray-600 hover:bg-gray-50" %>
+    <%= f.submit "Guardar", class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 cursor-pointer" %>
+  </div>
+<% end %>

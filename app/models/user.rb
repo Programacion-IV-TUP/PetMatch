@@ -8,8 +8,13 @@ class User < ApplicationRecord
   has_many :adoption_applications, dependent: :destroy
   has_many :favorites, dependent: :destroy
 
-  validates :first_name, precense: true
-  validates :second_name, precense: true
-  validates :email, precense: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :role, presence: true, inclusion: { in: %w[admin shelter_manager adopter] }
+  enum :role, {
+    admin: "admin",
+    shelter_manager: "shelter_manager",
+    adopter: "adopter"
+    }, validate: true
+
+  validates :first_name, presence: true
+  validates :second_name, presence: true
+  validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 end

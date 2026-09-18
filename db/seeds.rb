@@ -1,9 +1,170 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+puts "🌱 Cargando datos iniciales en la base de datos..."
+
+# -----------------------------------------------------------------------------
+# 1. Ciudades (Unicidad por nombre scoped a provincia)
+# -----------------------------------------------------------------------------
+puts "📍 Creando ciudades..."
+
+cities_data = [
+  { name: "La Plata", state: "Buenos Aires" },
+  { name: "Ciudad Autónoma de Buenos Aires", state: "CABA" },
+  { name: "Rosario", state: "Santa Fe" },
+  { name: "Córdoba", state: "Córdoba" },
+  { name: "Mendoza", state: "Mendoza" }
+]
+
+cities_data.each do |data|
+  City.find_or_create_by!(name: data[:name], state: data[:state])
+end
+
+puts "  └─ #{City.count} ciudades cargadas."
+
+# -----------------------------------------------------------------------------
+# 2. Razas (Lista maestra por especie)
+# -----------------------------------------------------------------------------
+puts "🐾 Creando razas..."
+
+breeds_data = [
+  { name: "Mestizo", species: "dog" },
+  { name: "Labrador Retriever", species: "dog" },
+  { name: "Golden Retriever", species: "dog" },
+  { name: "Ovejero Alemán", species: "dog" },
+  { name: "Mestizo / Común Europeo", species: "cat" },
+  { name: "Siamés", species: "cat" }
+]
+
+breeds_data.each do |data|
+  Breed.find_or_create_by!(name: data[:name], species: data[:species])
+end
+
+puts "  └─ #{Breed.count} razas cargadas."
+
+# -----------------------------------------------------------------------------
+# 3. Dirección y Refugio
+# -----------------------------------------------------------------------------
+puts "🏠 Creando dirección y refugio por defecto..."
+
+la_plata = City.find_by!(name: "La Plata", state: "Buenos Aires")
+
+# Crear primero la dirección obligatoria
+address = Address.find_or_create_by!(street: "Calle 50", number: "1234") do |a|
+  a.city = la_plata
+end
+
+# Crear el refugio vinculando la dirección creada
+shelter = Shelter.find_or_create_by!(name: "Refugio Mascotas La Plata") do |s|
+  s.phone = "2211234567"
+  s.email = "contacto@refugiolaplata.org"
+  s.address = address
+end
+
+# -----------------------------------------------------------------------------
+# 4. Usuarios Administradores y Adoptantes (con nombres y dirección)
+# -----------------------------------------------------------------------------
+puts "👤 Creando usuarios..."
+
+# Global Admin / Super Admin
+admin_user = User.find_or_initialize_by(email_addres: "admin@petmatch.com")
+if admin_user.new_record?
+  admin_user.first_name = "Admin"
+  admin_user.second_name = "General" # O last_name / segundo nombre según tu schema
+  admin_user.password = "password123"
+  admin_user.password_confirmation = "password123"
+  admin_user.role = "admin"
+  admin_user.address = address if admin_user.respond_to?(:address=)
+  admin_user.save!
+end
+
+# Shelter Manager
+manager_user = User.find_or_initialize_by(email_addres: "manager@refugiolaplata.org")
+if manager_user.new_record?
+  manager_user.first_name = "Carlos"
+  manager_user.second_name = "Gómez"
+  manager_user.password = "password123"
+  manager_user.password_confirmation = "password123"
+  manager_user.role = "shelter_manager"
+  manager_user.shelter = shelter
+  manager_user.address = address if manager_user.respond_to?(:address=)
+  manager_user.save!
+end
+
+# Usuario Adoptante
+adopter_user = User.find_or_initialize_by(email_addres: "adoptante@ejemplo.com")
+if adopter_user.new_record?
+  adopter_user.first_name = "María"
+  adopter_user.second_name = "Pérez"
+  adopter_user.password = "password123"
+  adopter_user.password_confirmation = "password123"
+  adopter_user.role = "adopter"
+  adopter_user.address = address if adopter_user.respond_to?(:address=)
+  adopter_user.save!
+end
+
+puts "  └─ #{User.count} usuarios creados/verificados."
+
+# -----------------------------------------------------------------------------
+# 5. Mascotas
+# -----------------------------------------------------------------------------
+puts "🐶 Creando mascotas de prueba..."
+
+breed_dog = Breed.find_by!(name: "Mestizo", species: "dog")
+breed_cat = Breed.find_by!(name: "Siamés", species: "cat")
+
+pet1 = Pet.find_or_create_by!(name: "Firulais", shelter: shelter) do |p|
+  p.age_months = 24
+  p.gender = "male"   # Obligatorio por validación
+  p.size = "medium"   # Obligatorio por validación
+  p.status = "available"
+  p.breed = breed_dog
+end
+
+pet2 = Pet.find_or_create_by!(name: "Misha", shelter: shelter) do |p|
+  p.age_months = 12
+  p.gender = "female" # Obligatorio por validación
+  p.size = "small"    # Obligatorio por validación
+  p.status = "in_process"
+  p.breed = breed_cat
+end
+
+puts "  └─ #{Pet.count} mascotas registradas."
+
+# -----------------------------------------------------------------------------
+# 6. Registros Médicos
+# -----------------------------------------------------------------------------
+puts "🩺 Creando registros médicos..."
+
+MedicalRecord.find_or_create_by!(title: "Vacuna Antirrábica", pet: pet1) do |m|
+  m.record_type = "vaccine"
+  m.applied_at = Date.current - 3.months
+  m.notes = "Vacunación anual completada sin reacciones adversas."
+end
+
+MedicalRecord.find_or_create_by!(title: "Desparasitación general", pet: pet1) do |m|
+  m.record_type = "deworming"
+  m.applied_at = Date.current - 1.month
+  m.notes = "Dosis de comprimido administrada según peso."
+end
+
+MedicalRecord.find_or_create_by!(title: "Chequeo inicial", pet: pet2) do |m|
+  m.record_type = "checkup"
+  m.applied_at = Date.current - 2.weeks
+  m.notes = "Gato en excelente estado de salud general."
+end
+
+puts "  └─ #{MedicalRecord.count} registros médicos vinculados."
+
+# -----------------------------------------------------------------------------
+# 7. Solicitudes de Adopción
+# -----------------------------------------------------------------------------
+puts "📋 Creando solicitudes de adopción..."
+
+AdoptionApplication.find_or_create_by!(pet: pet2, user: adopter_user) do |a|
+  a.status = "under_review"
+  a.housing_type = "House"
+  a.has_another_pet = true # Se pasa true para cumplir con 'presence: true' si el modelo lo requiere
+  a.notes = "Cuenta con espacio adecuado y disponibilidad horaria."
+end
+
+puts "  └─ #{AdoptionApplication.count} solicitudes registradas."
+
+puts "✅ Carga de seeds finalizada exitosamente."
