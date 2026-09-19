@@ -7,7 +7,7 @@ en:
     has_dependencies: "Cannot delete record because it has associated data."
 
   # ==========================================
-  # 2. MODELS AND ATTRIBUTES TRANSLATIONS
+  # 2. MODELS, ATTRIBUTES AND ENUMS (DOMAIN / API / VIEWS)
   # ==========================================
   activerecord:
     errors:
@@ -35,6 +35,7 @@ en:
         status: "Status"
         breed: "Breed"
         shelter: "Shelter"
+        photos: "Photos"
       
       adoption_application:
         status: "Application Status"
@@ -58,12 +59,27 @@ en:
         species: "Species"
 
       # ------------------------------------------
-      # Translated values for ENUMs
+      # Domain Attributes and Enums
       # ------------------------------------------
+      breed/species:
+        dog: "Dog"
+        cat: "Cat"
+        other: "Other"
+
       pet/status:
         available: "Available"
         in_process: "In Process"
         adopted: "Adopted"
+
+      pet/age:
+        unknown: "Unknown age"
+        and: "and"
+        years:
+          one: "year"
+          other: "years"
+        months:
+          one: "month"
+          other: "months"
 
       adoption_application/status:
         pending: "Pending"
@@ -80,10 +96,20 @@ en:
         treatment: "Treatment"
 
   # ==========================================
-  # 3. CONTROLLER MESSAGES (Flash / Notice)
-  # Uses Lazy Lookup: t(".success")
+  # 3. USER INTERFACE (BACK-OFFICE ADMIN ONLY)
   # ==========================================
   admin:
+    shared:
+      back_office: "Back-Office"
+      pets: "Pets"
+      applications: "Applications"
+      logout: "Log out"
+      system_active: "System Active"
+      cancel: "Cancel"
+      back: "← Back to list"
+      save_changes: "Save Changes"
+      create: "Create"
+
     pets:
       create:
         success: "Pet successfully created."
@@ -92,9 +118,66 @@ en:
       destroy:
         success: "Pet removed from system."
 
+      index:
+        title: "Pets"
+        header: "Pets List"
+        subtitle: "Management of animals registered in the shelter"
+        add_pet: "Register Pet"
+        table:
+          name: "Name"
+          species_breed: "Breed / Species"
+          age: "Age"
+          status: "Status"
+          actions: "Actions"
+          no_pets: "No pets registered yet."
+          no_breed: "No breed"
+          edit: "Edit"
+          show: "View Details"
+          delete: "Delete"
+          confirm_delete: "Are you sure you want to delete %{name}?"
+
+      new:
+        title: "New Pet"
+        header: "Register Pet"
+
+      edit:
+        title: "Edit Pet"
+        header: "Edit Pet: %{name}"
+
+      show:
+        title: "Pet Details"
+        photos: "Pet Photos"
+        no_photos: "No photos uploaded"
+        general_info: "General Information"
+
+      form:
+        photos_label: "Pet photos (maximum 5)"
+        photos_help: "Supports PNG, JPEG or WEBP (max 5MB per image)"
+        error_header: "Please correct the following errors:"
+
     adoption_applications:
       update:
         success: "Application status successfully updated."
+
+      index:
+        title: "Adoption Applications"
+        header: "Applications Received"
+        subtitle: "Review and management of adoption applicants"
+        table:
+          applicant: "Applicant"
+          pet: "Pet"
+          date: "Submission Date"
+          status: "Status"
+          actions: "Actions"
+          no_applications: "No adoption applications recorded yet."
+          view_details: "View Application"
+
+      show:
+        title: "Application Details"
+        applicant_info: "Applicant Information"
+        pet_info: "Requested Pet"
+        update_status: "Update Status"
+        internal_notes: "Internal Notes"
 
     medical_records:
       create:
@@ -119,7 +202,7 @@ en:
         success: "City updated successfully."
       destroy:
         success: "City removed successfully."
-        
+
     breeds:
       create:
         success: "Breed created successfully."
@@ -129,7 +212,7 @@ en:
         success: "Breed removed successfully."
 
   # ==========================================
-  # 4. GENERIC VIEW HELPERS
+  # 4. GENERIC HELPERS
   # ==========================================
   helpers:
     select:

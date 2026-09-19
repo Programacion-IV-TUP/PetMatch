@@ -54,7 +54,8 @@ module Admin
     end
 
     def pet_params
-      params.require(:pet).permit(:name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id)
+      params.require(:pet).permit(
+        :name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id, photos: [])
     end
   end
 end

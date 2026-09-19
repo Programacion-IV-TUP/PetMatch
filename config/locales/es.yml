@@ -5,8 +5,9 @@ es:
   errors:
     unauthorized: "No tienes permisos para realizar esta acción."
     has_dependencies: "No se puede eliminar el registro porque tiene datos asociados."
+
   # ==========================================
-  # 2. TRADUCCIONES DE MODELOS Y ATRIBUTOS
+  # 2. MODELOS, ATRIBUTOS Y ENUMS (DOMINIO / API / VISTAS)
   # ==========================================
   activerecord:
     errors:
@@ -34,6 +35,7 @@ es:
         status: "Estado"
         breed: "Raza"
         shelter: "Refugio"
+        photos: "Fotografías"
       
       adoption_application:
         status: "Estado de la solicitud"
@@ -57,12 +59,27 @@ es:
         species: "Especie"
 
       # ------------------------------------------
-      # Valores traducidos para los ENUMs
+      # Atributos de Dominio y Enums
       # ------------------------------------------
+      breed/species:
+        dog: "Perro"
+        cat: "Gato"
+        other: "Otro"
+
       pet/status:
         available: "Disponible"
-        in_process: "En proceso de adopción"
+        in_process: "En proceso"
         adopted: "Adoptado/a"
+
+      pet/age:
+        unknown: "Edad desconocida"
+        and: "y"
+        years:
+          one: "año"
+          other: "años"
+        months:
+          one: "mes"
+          other: "meses"
 
       adoption_application/status:
         pending: "Pendiente"
@@ -79,10 +96,20 @@ es:
         treatment: "Tratamiento"
 
   # ==========================================
-  # 3. MENSAJES DE LOS CONTROLADORES (Notice)
-  # Usan Lazy Lookup: t(".success")
+  # 3. INTERFAZ DE USUARIO (SOLO ADMIN BACK-OFFICE)
   # ==========================================
   admin:
+    shared:
+      back_office: "Back-Office"
+      pets: "Mascotas"
+      applications: "Solicitudes"
+      logout: "Salir"
+      system_active: "Sistema Operativo"
+      cancel: "Cancelar"
+      back: "← Volver al listado"
+      save_changes: "Guardar Cambios"
+      create: "Crear"
+
     pets:
       create:
         success: "Mascota creada correctamente."
@@ -91,9 +118,66 @@ es:
       destroy:
         success: "Mascota eliminada del sistema."
 
+      index:
+        title: "Mascotas"
+        header: "Listado de Mascotas"
+        subtitle: "Gestión de animales registrados en el refugio"
+        add_pet: "Registrar Mascota"
+        table:
+          name: "Nombre"
+          species_breed: "Raza / Especie"
+          age: "Edad"
+          status: "Estado"
+          actions: "Acciones"
+          no_pets: "No hay mascotas registradas todavía."
+          no_breed: "Sin raza"
+          edit: "Editar"
+          show: "Ver detalle"
+          delete: "Eliminar"
+          confirm_delete: "¿Confirmás eliminar a %{name}?"
+
+      new:
+        title: "Nueva Mascota"
+        header: "Registrar Mascota"
+
+      edit:
+        title: "Editar Mascota"
+        header: "Editar Mascota: %{name}"
+
+      show:
+        title: "Detalle de Mascota"
+        photos: "Fotografías de la Mascota"
+        no_photos: "Sin fotografías cargadas"
+        general_info: "Información General"
+
+      form:
+        photos_label: "Fotos de la mascota (máximo 5)"
+        photos_help: "Soporta PNG, JPEG o WEBP (máx. 5MB por imagen)"
+        error_header: "Corrige los siguientes errores:"
+
     adoption_applications:
       update:
         success: "Estado de la solicitud actualizado correctamente."
+
+      index:
+        title: "Solicitudes de Adopción"
+        header: "Solicitudes Recibidas"
+        subtitle: "Revisión y gestión de postulantes a adopción"
+        table:
+          applicant: "Solicitante"
+          pet: "Mascota"
+          date: "Fecha de Envío"
+          status: "Estado"
+          actions: "Acciones"
+          no_applications: "No hay solicitudes de adopción registradas."
+          view_details: "Ver Solicitud"
+
+      show:
+        title: "Detalle de Solicitud"
+        applicant_info: "Datos del Solicitante"
+        pet_info: "Mascota Solicitada"
+        update_status: "Actualizar Estado"
+        internal_notes: "Notas Internas"
 
     medical_records:
       create:
@@ -126,10 +210,9 @@ es:
         success: "Raza actualizada correctamente."
       destroy:
         success: "Raza eliminada del sistema."
-      
 
   # ==========================================
-  # 4. HELPERS GENÉRICOS PARA VISTAS (Opcional)
+  # 4. HELPERS GENÉRICOS
   # ==========================================
   helpers:
     select:

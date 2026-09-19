@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root to: "admin/pets#index"
   resource :session
   resources :passwords, param: :token
+  resources :locales, only: :update
   namespace :api do
     namespace :v1 do
       get "sessions/create"

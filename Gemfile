@@ -7,6 +7,8 @@ gem "json", "~> 2.8"
 
 gem "tailwindcss-rails"
 
+gem "active_storage_validations"
+
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record

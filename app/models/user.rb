@@ -8,13 +8,12 @@ class User < ApplicationRecord
   has_many :adoption_applications, dependent: :destroy
   has_many :favorites, dependent: :destroy
 
-  enum :role, {
-    admin: "admin",
-    shelter_manager: "shelter_manager",
-    adopter: "adopter"
-    }, validate: true
+  has_one_attached :avatar
+
+  enum :role, { admin: "admin", shelter_manager: "shelter_manager", adopter: "adopter" }, validate: true
 
   validates :first_name, presence: true
   validates :second_name, presence: true
-  validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email_address, presence: true, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :avatar, content_type: [ "image/png", "image/jpeg", "image/webp" ], size: { less_than: 5.megabytes }
 end
