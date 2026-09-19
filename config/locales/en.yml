@@ -50,6 +50,24 @@ en:
         performed_at: "Date Administered"
         next_due_at: "Next Due Date"
 
+      shelter:
+        name: "Name"
+        city: "City"
+        address: "Address"
+        phone: "Phone"
+        email: "Email"
+        website: "Website"
+        description: "Description"
+        logo: "Logo"
+        image: "Image"
+
+      address:
+        street: "Street"
+        number: "Number"
+        floor: "Floor"
+        apartment: "Apartment"
+        zip_code: "Zip Code"  
+
       city:
         name: "Name"
         state: "State"
@@ -111,6 +129,7 @@ en:
       create: "Create"
       edit: "Edit"
       delete: "Delete"
+      show: "Details"
 
     pets:
       create:
@@ -151,6 +170,7 @@ en:
         photos: "Pet Photos"
         no_photos: "No photos uploaded"
         general_info: "General Information"
+        back_to_shelter: "← Back to shelter"
 
       form:
         photos_label: "Pet photos (maximum 5)"
@@ -206,12 +226,47 @@ en:
         success: "Medical record successfully deleted."
 
     shelters:
+      new:
+        title: "New Shelter"
+      edit:
+        title: "Edit Shelter"
+      index:
+        title: "Shelters"
+        header: "Shelter List"
+        subtitle: "Management of shelters registered in the system"
+        add_shelter: "Register Shelter"
+        table:
+          name: "Name"
+          city: "City"
+          address: "Address"
+          phone: "Phone"
+          actions: "Actions"
+          no_shelters: "No shelters registered yet."
+          edit: "Edit"
+          show: "View Details"
+          delete: "Delete"
+          confirm_delete: "Are you sure you want to delete the shelter %{name}?"
+      show:
+        title: "Shelter Details"
+        details: "Shelter Information"
+        pets: "Pets in this Shelter"
+        no_pets: "This shelter currently has no pets registered."
       create:
         success: "Shelter successfully created."
       update:
         success: "Shelter successfully updated."
       destroy:
         success: "Shelter deleted."
+
+    addresses:
+      create:
+        success: "Address created successfully."
+      update:
+        success: "Address updated successfully."
+      destroy:
+        success: "Address deleted."
+        confirm: "Are you sure you want to delete this address?"
+        error: "Cannot delete address because it has associated data."
 
     cities:
       create:

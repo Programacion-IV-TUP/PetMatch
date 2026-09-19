@@ -38,6 +38,10 @@
             <%= link_to admin_adoption_applications_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_adoption_applications_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
               <span>📋</span> <%= t('admin.shared.applications') %>
             <% end %>
+
+            <%= link_to admin_shelters_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_shelters_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+              <span>🏠</span> <%= t('admin.shared.shelters') %>
+            <% end %>
           </nav>
         </div>
 

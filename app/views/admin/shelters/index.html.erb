@@ -1,0 +1,67 @@
+<% content_for :page_title, t('admin.shelters.index.title') %>
+
+<div class="space-y-6">
+  <!-- Header & Actions -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h3 class="text-2xl font-bold text-slate-800"><%= t('admin.shelters.index.title') %></h3>
+      <p class="text-xs text-slate-500 mt-0.5"><%= t('admin.shelters.index.subtitle') %></p>
+    </div>
+    <%= link_to new_admin_shelter_path, class: "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition" do %>
+      <span>➕</span> <%= t('admin.shelters.index.add_new') %>
+    <% end %>
+  </div>
+
+  <!-- Shelters Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+            <th class="py-3.5 px-6"><%= t('admin.shelters.index.table.name') %></th>
+            <th class="py-3.5 px-6"><%= t('admin.shelters.index.table.city') %></th>
+            <th class="py-3.5 px-6"><%= t('admin.shelters.index.table.address') %></th>
+            <th class="py-3.5 px-6"><%= t('admin.shelters.index.table.phone') %></th>
+            <th class="py-3.5 px-6 text-center"><%= t('admin.shelters.index.table.pets_count') %></th>
+            <th class="py-3.5 px-6 text-right"><%= t('admin.shared.actions') %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+          <% @shelters.each do |shelter| %>
+            <tr class="hover:bg-slate-50/50 transition">
+              <td class="py-4 px-6 font-bold text-slate-800">
+                <%= link_to shelter.name, admin_shelter_path(shelter), class: "hover:text-emerald-600 transition" %>
+              </td>
+              <td class="py-4 px-6 text-slate-600">
+                <%= shelter.address&.city&.name || "-" %>
+              </td>
+              <td class="py-4 px-6 text-slate-600">
+                <%= shelter.address.full_address || "-" %>
+              </td>
+              <td class="py-4 px-6 text-slate-600">
+                <%= shelter.phone.presence || "-" %>
+              </td>
+              <td class="py-4 px-6 text-center">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                  <%= shelter.pets.count rescue 0 %>
+                </span>
+              </td>
+              <td class="py-4 px-6 text-right space-x-2">
+                <%= link_to t('admin.shared.show'), admin_shelter_path(shelter), class: "font-semibold text-slate-600 hover:text-slate-900 transition" %>
+                <%= link_to t('admin.shared.edit'), edit_admin_shelter_path(shelter), class: "font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
+                <%= button_to t('admin.shared.delete'), admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelter.destroy.confirm') }, class: "inline-block font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @shelters.empty? %>
+            <tr>
+              <td colspan="6" class="py-12 text-center text-slate-400 text-xs">
+                <%= t('admin.shelters.index.empty') %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

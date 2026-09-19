@@ -50,6 +50,24 @@ es:
         performed_at: "Fecha de aplicación"
         next_due_at: "Próxima aplicación"
 
+      shelter:
+        name: "Nombre"
+        city: "Ciudad"
+        address: "Dirección"
+        phone: "Teléfono"
+        email: "Correo electrónico"
+        website: "Sitio web"
+        description: "Descripción"
+        logo: "Logo"
+        image: "Imagen"
+
+      address:
+        street: "Calle"
+        number: "Número"
+        floor: "Piso"
+        apartment: "Departamento"
+        zip_code: "Código postal"
+
       city:
         name: "Nombre"
         state: "Provincia"
@@ -111,6 +129,7 @@ es:
       create: "Crear"
       edit: "Editar"
       delete: "Eliminar"
+      show: "Ver detalle"
 
     pets:
       create:
@@ -151,6 +170,7 @@ es:
         photos: "Fotografías de la Mascota"
         no_photos: "Sin fotografías cargadas"
         general_info: "Información General"
+        back_to_shelter: "← Volver al refugio"
 
       form:
         photos_label: "Fotos de la mascota (máximo 5)"
@@ -206,12 +226,48 @@ es:
         success: "Registro médico eliminado exitosamente."
 
     shelters:
+      new:
+        title: "Nuevo Refugio"
+      edit:
+        title: "Editar Refugio"
+      index:
+        title: "Refugios"
+        header: "Listado de Refugios"
+        subtitle: "Gestión de refugios registrados en el sistema"
+        add_shelter: "Registrar Refugio"
+        table:
+          name: "Nombre"
+          city: "Ciudad"
+          address: "Dirección"
+          phone: "Teléfono"
+          actions: "Acciones"
+          no_shelters: "No hay refugios registrados todavía."
+          edit: "Editar"
+          show: "Ver detalle"
+          delete: "Eliminar"
+          confirm_delete: "¿Estás seguro de eliminar el refugio %{name}?"
+      show:
+        title: "Detalle de Refugio"
+        details: "Datos del Refugio"
+        pets: "Mascotas en este Refugio"
+        no_pets: "Este refugio no tiene mascotas registradas actualmente."
       create:
         success: "Refugio cargado exitosamente."
       update:
         success: "Refugio actualizado exitosamente."
       destroy:
-        success: "Refugio eliminado."
+        confirm: "¿Estás seguro de eliminar el refugio %{name}?"
+        success: "Refugio eliminado exitosamente."
+
+    addresses:
+      create:
+        success: "Dirección creada exitosamente."
+      update:
+        success: "Dirección actualizada exitosamente."
+      destroy:
+        confirm: "¿Estás seguro de eliminar esta dirección?"
+        success: "Dirección eliminada exitosamente."
+        error: "No se puede eliminar la dirección porque tiene datos asociados."
 
     cities:
       create:
