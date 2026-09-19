@@ -9,7 +9,7 @@ module Admin
     def show
       # Adds the relations to generate fast access in the admin panel
       @adoption_applications = @pet.adoption_applications.includes(:user).order(created_at: :desc)
-      @medical_records = @pet.medical_records.order(applied_at: :desc)
+      @medical_records = @pet.medical_records.order(performed_at: :desc)
     end
 
     def new

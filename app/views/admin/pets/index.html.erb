@@ -1,7 +1,7 @@
 <% content_for :page_title, t('.title') %>
 
 <div class="space-y-6">
-  <!-- Acciones superior -->
+  <!-- Actions Header -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
       <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
@@ -13,7 +13,7 @@
     <% end %>
   </div>
 
-  <!-- Tabla -->
+  <!-- Pets Table -->
   <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full text-left text-sm text-slate-600">
@@ -31,17 +31,28 @@
             <% @pets.each do |pet| %>
               <tr class="hover:bg-slate-50/50 transition">
                 <td class="px-6 py-4 font-semibold text-slate-900">
-                  <div class="flex items-center gap-3">
+                  <%= link_to admin_pet_path(pet), class: "flex items-center gap-3 hover:text-emerald-600 transition group" do %>
+                    <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base group-hover:bg-emerald-50 transition">
+                      <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+                    </div>
                     <span><%= pet.name %></span>
-                  </div>
+                  <% end %>
                 </td>
+                
+                <!-- Breed / Species -->
                 <td class="px-6 py-4">
-                  <span class="capitalize text-slate-800 font-medium"><%= pet.breed&.name || t('.table.no_breed') %></span>
-                  <span class="text-slate-400 text-xs block"><%= pet.breed&.species.present? ? t("activerecord.attributes.breed/species.#{pet.breed.species.downcase}", default: pet.breed.species) : "N/A" %></span>
+                  <span class="font-semibold text-slate-800 block"><%= pet.breed&.name || t('.table.no_breed') %></span>
+                  <span class="text-slate-400 text-xs capitalize">
+                    <%= pet.breed&.species.present? ? t("activerecord.attributes.breed/species.#{pet.breed.species.downcase}", default: pet.breed.species) : "N/A" %>
+                  </span>
                 </td>
+
+                <!-- Age -->
                 <td class="px-6 py-4 text-slate-600">
                   <%= pet.formatted_age %>
                 </td>
+
+                <!-- Status Badge -->
                 <td class="px-6 py-4">
                   <% badge_class = case pet.status
                      when 'available' then 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -53,7 +64,10 @@
                     <%= t("activerecord.attributes.pet/status.#{pet.status}", default: pet.status.humanize) %>
                   </span>
                 </td>
+
+                <!-- Actions column -->
                 <td class="px-6 py-4 text-right space-x-2">
+                  <%= link_to t('.table.show'), admin_pet_path(pet), class: "text-xs font-semibold text-slate-600 hover:text-slate-900 transition" %>
                   <%= link_to t('.table.edit'), edit_admin_pet_path(pet), class: "text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
                   <%= button_to t('.table.delete'), admin_pet_path(pet), method: :delete, data: { turbo_confirm: t('.table.confirm_delete', name: pet.name) }, class: "inline-block text-xs font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
                 </td>

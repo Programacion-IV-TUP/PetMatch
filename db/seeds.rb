@@ -45,10 +45,15 @@ puts "  └─ #{Breed.count} razas cargadas."
 puts "🏠 Creando dirección y refugio por defecto..."
 
 la_plata = City.find_by!(name: "La Plata", state: "Buenos Aires")
+caba = City.find_by!(name: "Ciudad Autónoma de Buenos Aires", state: "CABA")
 
 # Crear primero la dirección obligatoria
 address = Address.find_or_create_by!(street: "Calle 50", number: "1234") do |a|
   a.city = la_plata
+end
+
+address2 = Address.find_or_create_by!(street: "Av. Corrientes", number: "22") do |a|
+  a.city = caba
 end
 
 # Crear el refugio vinculando la dirección creada
@@ -58,16 +63,22 @@ shelter = Shelter.find_or_create_by!(name: "Refugio Mascotas La Plata") do |s|
   s.address = address
 end
 
+shelter = Shelter.find_or_create_by!(name: "Refugio Mascotas Buenos Aires") do |s|
+  s.phone = "1112345678"
+  s.email = "contacto@refugiobaires.org"
+  s.address = address
+end
+
 # -----------------------------------------------------------------------------
 # 4. Usuarios Administradores y Adoptantes (con nombres y dirección)
 # -----------------------------------------------------------------------------
 puts "👤 Creando usuarios..."
 
 # Global Admin / Super Admin
-admin_user = User.find_or_initialize_by(email_addres: "admin@petmatch.com")
+admin_user = User.find_or_initialize_by(email_address: "admin@petmatch.com")
 if admin_user.new_record?
   admin_user.first_name = "Admin"
-  admin_user.second_name = "General" # O last_name / segundo nombre según tu schema
+  admin_user.last_name = "General" # O last_name / segundo nombre según tu schema
   admin_user.password = "password123"
   admin_user.password_confirmation = "password123"
   admin_user.role = "admin"
@@ -76,10 +87,10 @@ if admin_user.new_record?
 end
 
 # Shelter Manager
-manager_user = User.find_or_initialize_by(email_addres: "manager@refugiolaplata.org")
+manager_user = User.find_or_initialize_by(email_address: "manager@refugiolaplata.org")
 if manager_user.new_record?
   manager_user.first_name = "Carlos"
-  manager_user.second_name = "Gómez"
+  manager_user.last_name = "Gómez"
   manager_user.password = "password123"
   manager_user.password_confirmation = "password123"
   manager_user.role = "shelter_manager"
@@ -88,11 +99,24 @@ if manager_user.new_record?
   manager_user.save!
 end
 
+manager_user = User.find_or_initialize_by(email_address: "manager@refugiobuenosaires.org")
+if manager_user.new_record?
+  manager_user.first_name = "Fernanda"
+  manager_user.last_name = "García"
+  manager_user.password = "password123"
+  manager_user.password_confirmation = "password123"
+  manager_user.role = "shelter_manager"
+  manager_user.shelter = shelter
+  manager_user.address = address2 if manager_user.respond_to?(:address=)
+  manager_user.save!
+end
+
+
 # Usuario Adoptante
-adopter_user = User.find_or_initialize_by(email_addres: "adoptante@ejemplo.com")
+adopter_user = User.find_or_initialize_by(email_address: "adoptante@ejemplo.com")
 if adopter_user.new_record?
   adopter_user.first_name = "María"
-  adopter_user.second_name = "Pérez"
+  adopter_user.last_name = "Pérez"
   adopter_user.password = "password123"
   adopter_user.password_confirmation = "password123"
   adopter_user.role = "adopter"
@@ -135,19 +159,19 @@ puts "🩺 Creando registros médicos..."
 
 MedicalRecord.find_or_create_by!(title: "Vacuna Antirrábica", pet: pet1) do |m|
   m.record_type = "vaccine"
-  m.applied_at = Date.current - 3.months
+  m.performed_at = Date.current - 3.months
   m.notes = "Vacunación anual completada sin reacciones adversas."
 end
 
 MedicalRecord.find_or_create_by!(title: "Desparasitación general", pet: pet1) do |m|
   m.record_type = "deworming"
-  m.applied_at = Date.current - 1.month
+  m.performed_at = Date.current - 1.month
   m.notes = "Dosis de comprimido administrada según peso."
 end
 
 MedicalRecord.find_or_create_by!(title: "Chequeo inicial", pet: pet2) do |m|
   m.record_type = "checkup"
-  m.applied_at = Date.current - 2.weeks
+  m.performed_at = Date.current - 2.weeks
   m.notes = "Gato en excelente estado de salud general."
 end
 

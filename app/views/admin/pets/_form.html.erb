@@ -1,38 +1,84 @@
-<%= form_with(model: [:admin, pet], class: "bg-white p-6 rounded shadow max-w-lg space-y-4") do |f| %>
-  <div>
-    <%= f.label :name, "Nombre", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.text_field :name, class: "mt-1 w-full border rounded p-2" %>
+<%# app/views/admin/pets/_form.html.erb %>
+<%= form_with(model: [:admin, pet], local: true, class: "space-y-6 bg-white p-6 md:p-8 rounded-2xl border border-slate-200/80 shadow-sm") do |f| %>
+  <% if pet.errors.any? %>
+    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium space-y-1">
+      <p class="font-bold text-sm"><%= t('admin.pets.form.error_header') %></p>
+      <ul class="list-disc list-inside space-y-0.5">
+        <% pet.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Name -->
+    <div>
+      <%= f.label :name, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.text_field :name, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Age in months -->
+    <div>
+      <%= f.label :age_months, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.number_field :age_months, min: 0, placeholder: "Ej: 24 (2 años)", class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Gender -->
+    <div>
+      <%= f.label :gender, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.select :gender, [["Macho", "male"], ["Hembra", "female"]], { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+    </div>
+
+    <!-- Size -->
+    <div>
+      <%= f.label :size, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.select :size, [["Pequeño", "small"], ["Mediano", "medium"], ["Grande", "large"]], { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+    </div>
+
+    <!-- Weight -->
+    <div>
+      <%= f.label :weight, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.number_field :weight, step: 0.1, min: 0, placeholder: "Ej: 12.5", class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Breed (i18n label) -->
+    <div>
+      <%= f.label :breed_id, t('activerecord.attributes.pet.breed'), class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.collection_select :breed_id, Breed.order(:name), :id, :name, { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+    </div>
+
+    <!-- Status -->
+    <div>
+      <%= f.label :status, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.select :status, Pet.statuses.keys.map { |s| [t("activerecord.attributes.pet/status.#{s}"), s] }, { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+    </div>
+
+    <% if current_user&.role == "admin" %>
+      <!-- Shelter (i18n label) -->
+      <div>
+        <%= f.label :shelter_id, t('activerecord.attributes.pet.shelter'), class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+        <%= f.collection_select :shelter_id, Shelter.order(:name), :id, :name, { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+      </div>
+    <% end %>
+
+    <!-- Active Storage Photos -->
+    <div class="md:col-span-2">
+      <%= f.label :photos, t('admin.pets.form.photos_label'), class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.file_field :photos, multiple: true, accept: "image/png, image/jpeg, image/webp", class: "w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer border border-slate-200 rounded-xl" %>
+      <p class="text-xs text-slate-400 mt-1"><%= t('admin.pets.form.photos_help') %></p>
+    </div>
+
+    <!-- Description -->
+    <div class="md:col-span-2">
+      <%= f.label :description, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.text_area :description, rows: 4, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
   </div>
 
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <%= f.label :gender, "Género", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.select :gender, [["Macho", "male"], ["Hembra", "female"]], {}, class: "mt-1 w-full border rounded p-2" %>
-    </div>
-    <div>
-      <%= f.label :size, "Tamaño", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.select :size, [["Chico", "small"], ["Mediano", "medium"], ["Grande", "large"]], {}, class: "mt-1 w-full border rounded p-2" %>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <%= f.label :age_months, "Edad (meses)", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.number_field :age_months, class: "mt-1 w-full border rounded p-2" %>
-    </div>
-    <div>
-      <%= f.label :breed_id, "Raza", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.collection_select :breed_id, Breed.all, :id, :name, {}, class: "mt-1 w-full border rounded p-2" %>
-    </div>
-  </div>
-
-  <div>
-    <%= f.label :status, "Estado", class: "block text-sm font-medium text-gray-700" %>
-    <%= f.select :status, Pet.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "mt-1 w-full border rounded p-2" %>
-  </div>
-
-  <div class="pt-4 flex justify-end space-x-2">
-    <%= link_to "Cancelar", admin_pets_path, class: "px-4 py-2 border rounded text-gray-600 hover:bg-gray-50" %>
-    <%= f.submit "Guardar", class: "px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 cursor-pointer" %>
+  <!-- Form Actions -->
+  <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+    <%= link_to t('admin.shared.cancel'), admin_pets_path, class: "px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition" %>
+    <%= f.submit class: "px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition cursor-pointer" %>
   </div>
 <% end %>

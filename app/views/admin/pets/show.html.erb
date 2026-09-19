@@ -1,2 +1,123 @@
-<h1>Admin::Pets#show</h1>
-<p>Find me in app/views/admin/pets/show.html.erb</p>
+<%# app/views/admin/pets/show.html.erb %>
+<% content_for :page_title, t('admin.pets.show.title') %>
+
+<div class="max-w-4xl mx-auto space-y-6">
+  <!-- Top header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <%# Fix: Navigation back to pets list and correct model reference %>
+      <%= link_to t('admin.shared.back'), admin_pets_path, class: "text-xs text-emerald-600 hover:text-emerald-700 font-semibold mb-2 inline-block" %>
+      <h3 class="text-2xl font-bold text-slate-800 flex items-center gap-3">
+        <%= @pet.name %>
+        <% badge_class = case @pet.status
+           when 'available' then 'bg-emerald-50 text-emerald-700 border-emerald-200'
+           when 'in_process' then 'bg-amber-50 text-amber-700 border-amber-200'
+           when 'adopted' then 'bg-slate-100 text-slate-600 border-slate-200'
+           else 'bg-slate-50 text-slate-600 border-slate-200'
+           end %>
+        <span class="text-xs px-3 py-1 rounded-full font-semibold border <%= badge_class %>">
+          <%= t("activerecord.attributes.pet/status.#{@pet.status}", default: @pet.status.humanize) %>
+        </span>
+      </h3>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <%= link_to t('admin.pets.index.table.edit'), edit_admin_pet_path(@pet), class: "px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition" %>
+    </div>
+  </div>
+
+  <!-- Active Storage Photos Gallery -->
+  <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+    <h4 class="text-sm font-bold text-slate-800"><%= t('admin.pets.show.photos') %></h4>
+    <% if @pet.photos.attached? %>
+      <!-- Grid with explicit card sizing -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <% @pet.photos.each do |photo| %>
+          <div class="h-40 rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 shadow-xs">
+            <%= image_tag photo, class: "w-full h-full object-cover hover:scale-105 transition duration-300" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
+        📷 <%= t('admin.pets.show.no_photos') %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- General Info -->
+  <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+    <h4 class="text-sm font-bold text-slate-800"><%= t('admin.pets.show.general_info') %></h4>
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <dt class="text-slate-400 font-medium mb-0.5"><%= t('activerecord.attributes.breed.species') %></dt>
+        <dd class="text-slate-800 font-semibold capitalize">
+          <%= @pet.breed&.species.present? ? t("activerecord.attributes.breed/species.#{@pet.breed.species.downcase}", default: @pet.breed.species) : "N/A" %>
+        </dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium mb-0.5"><%= t('activerecord.attributes.pet.breed') %></dt>
+        <dd class="text-slate-800 font-semibold"><%= @pet.breed&.name || "N/A" %></dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium mb-0.5"><%= t('admin.pets.index.table.age') %></dt>
+        <dd class="text-slate-800 font-semibold"><%= @pet.formatted_age %></dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium mb-0.5"><%= t('activerecord.attributes.pet.shelter') %></dt>
+        <dd class="text-slate-800 font-semibold"><%= @pet.shelter&.name || "N/A" %></dd>
+      </div>
+
+      <div class="sm:col-span-2">
+        <dt class="text-slate-400 font-medium mb-0.5"><%= t('activerecord.attributes.pet.description') %></dt>
+        <dd class="text-slate-700 leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-100 mt-1">
+          <%= @pet.description.presence || "Sin descripción proporcionada." %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Medical Records Section -->
+  <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <h4 class="text-sm font-bold text-slate-800">🏥 <%= t('admin.medical_records.index.title') %></h4>
+      <%= link_to new_admin_pet_medical_record_path(@pet), class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition" do %>
+        <span>➕</span> <%= t('admin.medical_records.new.add_record') %>
+      <% end %>
+    </div>
+
+    <% if @pet.medical_records.any? %>
+      <div class="space-y-3">
+        <% @pet.medical_records.order(performed_at: :desc).each do |record| %>
+          <div class="p-4 rounded-xl border border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                  <%= t("activerecord.attributes.medical_record/record_type.#{record.record_type}", default: record.record_type.humanize) %>
+                </span>
+                <span class="text-xs text-slate-400"><%= l(record.performed_at, format: :short) rescue record.performed_at %></span>
+              </div>
+              <p class="text-sm font-bold text-slate-800"><%= record.title %></p>
+              <% if record.notes.present? %>
+                <p class="text-xs text-slate-600 mt-1"><%= record.notes %></p>
+              <% end %>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 self-end sm:self-center">
+              <%= link_to t('admin.shared.edit'), edit_admin_medical_record_path(record), class: "text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
+              <%= button_to t('admin.shared.delete'), admin_medical_record_path(record), method: :delete, data: { turbo_confirm: t('admin.medical_records.destroy.confirm') }, class: "text-xs font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
+        🩺 <%= t('admin.medical_records.index.no_records') %>
+      </div>
+    <% end %>
+  </div>
+</div>

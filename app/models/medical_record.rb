@@ -10,6 +10,6 @@ class MedicalRecord < ApplicationRecord
   }, default: "vaccine"
 
   validates :record_type, presence: true
-  validates :applied_at, presence: true
+  validates :performed_at, presence: true
   validates :title, presence: true
 end

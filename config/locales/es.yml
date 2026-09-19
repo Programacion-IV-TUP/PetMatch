@@ -47,7 +47,7 @@ es:
         record_type: "Tipo de registro"
         title: "Título / Diagnóstico"
         description: "Descripción / Observaciones"
-        applied_at: "Fecha de aplicación"
+        performed_at: "Fecha de aplicación"
         next_due_at: "Próxima aplicación"
 
       city:
@@ -100,7 +100,7 @@ es:
   # ==========================================
   admin:
     shared:
-      back_office: "Back-Office"
+      back_office: "Administración"
       pets: "Mascotas"
       applications: "Solicitudes"
       logout: "Salir"
@@ -109,6 +109,8 @@ es:
       back: "← Volver al listado"
       save_changes: "Guardar Cambios"
       create: "Crear"
+      edit: "Editar"
+      delete: "Eliminar"
 
     pets:
       create:
@@ -180,12 +182,28 @@ es:
         internal_notes: "Notas Internas"
 
     medical_records:
+      new:
+        title: "Nuevo Registro Médico"
+        header: "Nuevo Registro Médico para %{name}"
+        add_record: "Agregar Registro Médico"
+        back: "Volver a %{pet}"
+      edit:
+        title: "Editar Registro Médico"
+        header: "Editar Registro Médico para %{name}"
+        back: "Volver a %{pet}"
+      index:
+        title: "Registros Médicos"
+        header: "Historial Médico de %{name}"
+        back: "Volver a %{pet}"
+        no_records: "No hay registros médicos para esta mascota."
+        add_record: "Agregar Registro Médico"
       create:
         success: "Registro médico cargado exitosamente."
       update:
         success: "Registro médico actualizado exitosamente."
       destroy:
-        success: "Registro médico eliminado."
+        confirm: "¿Estás seguro de eliminar este registro médico?"
+        success: "Registro médico eliminado exitosamente."
 
     shelters:
       create:

@@ -1,0 +1,14 @@
+<% content_for :page_title, t('admin.medical_records.edit.title', default: 'Editar Registro Médico') %>
+
+<div class="max-w-3xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h3 class="text-xl font-bold text-slate-800">
+        <%= t('admin.medical_records.edit.header', name: @pet.name) %>
+      </h3>
+      <%= link_to t('admin.shared.back'), admin_pet_path(@pet), class: "text-xs text-emerald-600 hover:text-emerald-700 font-semibold mt-1 inline-block" %>
+    </div>
+  </div>
+
+  <%= render "form", pet: @pet, medical_record: @medical_record %>
+</div>

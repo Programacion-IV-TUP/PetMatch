@@ -47,7 +47,7 @@ en:
         record_type: "Record Type"
         title: "Title / Diagnosis"
         description: "Description / Notes"
-        applied_at: "Date Administered"
+        performed_at: "Date Administered"
         next_due_at: "Next Due Date"
 
       city:
@@ -100,7 +100,7 @@ en:
   # ==========================================
   admin:
     shared:
-      back_office: "Back-Office"
+      back_office: "Administration"
       pets: "Pets"
       applications: "Applications"
       logout: "Log out"
@@ -109,6 +109,8 @@ en:
       back: "← Back to list"
       save_changes: "Save Changes"
       create: "Create"
+      edit: "Edit"
+      delete: "Delete"
 
     pets:
       create:
@@ -180,12 +182,28 @@ en:
         internal_notes: "Internal Notes"
 
     medical_records:
+      new:
+        title: "New Medical Record"
+        header: "New Medical Record for %{name}"
+        add_record: "Add Medical Record"
+        back: "Back to %{pet}"
+      edit:
+        title: "Edit Medical Record"
+        header: "Edit Medical Record for %{name}"
+        back: "Back to %{pet}"
+      index:
+        title: "Medical Records"
+        header: "Medical History of %{name}"
+        back: "Back to %{pet}"
+        no_records: "No medical records for this pet."
+        add_record: "Add Medical Record"
       create:
         success: "Medical record successfully logged."
       update:
         success: "Medical record successfully updated."
       destroy:
-        success: "Medical record deleted."
+        confirm: "Are you sure you want to delete this medical record?"
+        success: "Medical record successfully deleted."
 
     shelters:
       create:
