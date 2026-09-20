@@ -59,7 +59,7 @@ es:
         website: "Sitio web"
         description: "Descripción"
         logo: "Logo"
-        image: "Imagen"
+        photos: "Imágenes"
 
       address:
         street: "Calle"
@@ -67,6 +67,8 @@ es:
         floor: "Piso"
         apartment: "Departamento"
         zip_code: "Código postal"
+        city_id: "Ciudad"
+        city: "Ciudad"
 
       city:
         name: "Nombre"
@@ -75,6 +77,19 @@ es:
       breed:
         name: "Nombre"
         species: "Especie"
+
+      user:
+        first_name: "Nombre"
+        last_name: "Apellido"
+        email_address: "Correo electrónico"
+        password: "Nueva contraseña"
+        password_confirmation: "Confirmar contraseña"
+        role: "Rol"
+        shelter_id: "Refugio asignado"
+
+      user/role:
+        admin: "Administrador"
+        shelter_manager: "Encargado de Refugio"
 
       # ------------------------------------------
       # Atributos de Dominio y Enums
@@ -121,15 +136,22 @@ es:
       back_office: "Administración"
       pets: "Mascotas"
       applications: "Solicitudes"
+      shelters: "Refugios"
+      my_shelter: "Mi Refugio"
+      users: "Usuarios"
+      profile: "Mi Perfil"
       logout: "Salir"
-      system_active: "Sistema Operativo"
+      system_active: "Sistema Online"
       cancel: "Cancelar"
       back: "← Volver al listado"
       save_changes: "Guardar Cambios"
       create: "Crear"
       edit: "Editar"
       delete: "Eliminar"
-      show: "Ver detalle"
+      confirm_delete: "¿Confirmás eliminar el registro?"
+      show: "Detalle"
+      actions: "Acciones"
+      form_error_header: "Corrige los siguientes errores:"
 
     pets:
       create:
@@ -193,6 +215,7 @@ es:
           actions: "Acciones"
           no_applications: "No hay solicitudes de adopción registradas."
           view_details: "Ver Solicitud"
+          review: "Revisar"
 
       show:
         title: "Detalle de Solicitud"
@@ -246,11 +269,18 @@ es:
           show: "Ver detalle"
           delete: "Eliminar"
           confirm_delete: "¿Estás seguro de eliminar el refugio %{name}?"
+          pets_count: "Cant. Mascotas"  
       show:
         title: "Detalle de Refugio"
         details: "Datos del Refugio"
         pets: "Mascotas en este Refugio"
         no_pets: "Este refugio no tiene mascotas registradas actualmente."
+      form:
+        address_section: "Datos de Dirección"
+        logo_label: "Logo del Refugio"
+        logo_help: "Sube una imagen en formato PNG o JPG"
+        photos_section: "Fotografías del Refugio"
+        photos_help: "Sube imágenes de las instalaciones del refugio (máximo 5)"
       create:
         success: "Refugio cargado exitosamente."
       update:
@@ -284,6 +314,34 @@ es:
         success: "Raza actualizada correctamente."
       destroy:
         success: "Raza eliminada del sistema."
+
+    users:
+      index:
+        title: "Usuarios"
+        header: "Gestión de Usuarios"
+        subtitle: "Administración de accesos y encargados de refugios."
+        add_manager: "Nuevo Encargado"
+        table:
+          name: "Nombre"
+          email: "Email"
+          role: "Rol"
+          shelter: "Refugio"
+          actions: "Acciones"
+          confirm_delete: "¿Estás seguro de eliminar el usuario %{name}?"
+      new:
+        title: "Crear Encargado de Refugio"
+      edit:
+        title: "Editar Usuario"
+      form:
+        address_section: "Datos de Dirección"
+        no_shelter: "Sin refugio asignado"
+        password_hint: "Dejá los campos de contraseña en blanco si no deseás modificarla."
+      create:
+        success: "Usuario creado exitosamente."
+      update:
+        success: "Datos de usuario actualizados correctamente."
+      destroy:
+        success: "Usuario eliminado correctamente."
 
   # ==========================================
   # 4. HELPERS GENÉRICOS

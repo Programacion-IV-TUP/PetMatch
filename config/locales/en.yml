@@ -59,14 +59,16 @@ en:
         website: "Website"
         description: "Description"
         logo: "Logo"
-        image: "Image"
+        photos: "Photos"
 
       address:
         street: "Street"
         number: "Number"
         floor: "Floor"
         apartment: "Apartment"
-        zip_code: "Zip Code"  
+        zip_code: "Zip Code"
+        city_id: "City"
+        city: "City"
 
       city:
         name: "Name"
@@ -75,6 +77,19 @@ en:
       breed:
         name: "Name"
         species: "Species"
+
+      user:
+        first_name: "First Name"
+        last_name: "Last Name"
+        email_address: "Email Address"
+        password: "New Password"
+        password_confirmation: "Confirm Password"
+        role: "Role"
+        shelter_id: "Assigned Shelter"
+
+      user/role:
+        admin: "Admin"
+        shelter_manager: "Shelter Manager"
 
       # ------------------------------------------
       # Domain Attributes and Enums
@@ -121,6 +136,10 @@ en:
       back_office: "Administration"
       pets: "Pets"
       applications: "Applications"
+      shelter: "Shelters"
+      my_shelter: "My Shelter"
+      users: "Users"
+      profile: "My Profile"
       logout: "Log out"
       system_active: "System Active"
       cancel: "Cancel"
@@ -130,6 +149,8 @@ en:
       edit: "Edit"
       delete: "Delete"
       show: "Details"
+      actions: "Actions"
+      form_error_header: "Please correct the following errors:"
 
     pets:
       create:
@@ -193,6 +214,7 @@ en:
           actions: "Actions"
           no_applications: "No adoption applications recorded yet."
           view_details: "View Application"
+          review: "Review"
 
       show:
         title: "Application Details"
@@ -246,11 +268,18 @@ en:
           show: "View Details"
           delete: "Delete"
           confirm_delete: "Are you sure you want to delete the shelter %{name}?"
+          pets_count: "Pets Count"
       show:
         title: "Shelter Details"
         details: "Shelter Information"
         pets: "Pets in this Shelter"
         no_pets: "This shelter currently has no pets registered."
+      form:
+        address_section: "Address Information"
+        logo_label: "Shelter Logo"
+        logo_help: "Upload an image in PNG or JPG format"
+        photos_section: "Shelter Photos"
+        photos_help: "Upload images of the shelter facilities (maximum 5)"
       create:
         success: "Shelter successfully created."
       update:
@@ -283,6 +312,34 @@ en:
         success: "Breed updated successfully."
       destroy:
         success: "Breed removed successfully."
+
+    users:
+      index:
+        title: "Users"
+        header: "User Management"
+        subtitle: "Management of accesses and shelter managers."
+        add_manager: "New Manager"
+        table:
+          name: "Name"
+          email: "Email"
+          role: "Role"
+          shelter: "Shelter"
+          actions: "Actions"
+          confirm_delete: "Are you sure you want to delete the user %{name}?"
+      new:
+        title: "Create Shelter Manager"
+      edit:
+        title: "Edit User"
+      form:
+        address_section: "Address Information"
+        no_shelter: "No shelter assigned"
+        password_hint: "Leave password fields blank if you don't want to change it."
+      create:
+        success: "User created successfully."
+      update:
+        success: "User data updated successfully."
+      destroy:
+        success: "User deleted successfully."
 
   # ==========================================
   # 4. GENERIC HELPERS

@@ -1,0 +1,171 @@
+
+<%= form_with(model: [:admin, user], local: true, class: "space-y-6 bg-white p-6 md:p-8 rounded-2xl border border-slate-200/80 shadow-sm") do |f| %>
+  <% if user.errors.any? %>
+    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium space-y-1">
+      <p class="font-bold text-sm"><%= t('admin.shared.form_error_header') %></p>
+      <ul class="list-disc list-inside space-y-0.5">
+        <% user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- First Name -->
+    <div>
+      <%= f.label :first_name, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.text_field :first_name, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <%= f.label :last_name, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.text_field :last_name, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Email Address -->
+    <div class="md:col-span-2">
+      <%= f.label :email_address, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <%= f.email_field :email_address, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+    </div>
+
+    <!-- Avatar Field -->
+    <div class="md:col-span-2">
+      <%= f.label :avatar, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <div class="flex items-center gap-4">
+        <% if user.avatar.attached? && user.avatar.persisted? %>
+          <%= image_tag user.avatar, class: "w-16 h-16 rounded-full object-cover border border-slate-200 shadow-sm" %>
+        <% else %>
+          <div class="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-lg">
+            <%= user.first_name&.first || "U" %>
+          </div>
+        <% end %>
+
+        <%= f.file_field :avatar, accept: "image/*", class: "block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition cursor-pointer" %>
+      </div>
+    </div>
+
+    <% if current_user.admin? %>
+      <!-- Role Selection (Only Admin) -->
+      <div>
+        <%= f.label :role, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+        <%= f.select :role, User.roles.keys.map { |r| [t("activerecord.attributes.user/role.#{r}"), r] }, {}, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+      </div>
+
+      <!-- Shelter Assignment (Only Admin) -->
+      <div>
+        <%= f.label :shelter_id, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+        <%= f.collection_select :shelter_id, Shelter.order(:name), :id, :name, { include_blank: t('.no_shelter') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 bg-white outline-none transition" %>
+      </div>
+    <% end %>
+
+    <!-- NESTED ADDRESS FIELDS -->
+    <div class="md:col-span-2 border-t border-slate-100 pt-4 mt-2">
+      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4"><%= t('.address_section') %></h4>
+      
+      <%= f.fields_for :address do |af| %>
+        <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <!-- Street -->
+          <div class="sm:col-span-2">
+            <%= af.label :street, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.text_field :street, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 outline-none transition" %>
+          </div>
+
+          <!-- Number -->
+          <div>
+            <%= af.label :number, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.text_field :number, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 outline-none transition" %>
+          </div>
+
+          <!-- Floor -->
+          <div>
+            <%= af.label :floor, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.text_field :floor, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 outline-none transition" %>
+          </div>
+
+          <!-- Apartment -->
+          <div>
+            <%= af.label :apartment, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.text_field :apartment, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 outline-none transition" %>
+          </div>
+
+          <!-- Zip Code -->
+          <div>
+            <%= af.label :zip_code, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.text_field :zip_code, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 outline-none transition" %>
+          </div>
+
+          <!-- City -->
+          <div>
+            <%= af.label :city_id, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+            <%= af.collection_select :city_id, City.order(:name), :id, :name, { prompt: t('helpers.select.prompt') }, class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2 px-3 text-slate-800 bg-white outline-none transition" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Password Fields -->
+    <div class="md:col-span-2 border-t border-slate-100 pt-4 mt-2">
+  <p class="text-xs text-slate-400 mb-4"><%= t('.password_hint', default: 'Dejá estos campos en blanco si no querés cambiar la contraseña.') %></p>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Contraseña -->
+    <div data-controller="password-toggle">
+      <%= f.label :password, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <div class="relative">
+        <%= f.password_field :password, 
+              autocomplete: "new-password", 
+              data: { password_toggle_target: "input" }, 
+              class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 pl-3.5 pr-10 text-slate-800 outline-none transition" %>
+        
+        <button type="button" 
+                data-action="click->password-toggle#toggle" 
+                tabindex="-1"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition focus:outline-none">
+          <!-- Ícono Ojo Cerrado (se muestra por defecto) -->
+          <svg data-password-toggle-target="iconShow" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <!-- Ícono Ojo Tachado (oculto inicialmente) -->
+          <svg data-password-toggle-target="iconHide" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Confirmación de Contraseña -->
+    <div data-controller="password-toggle">
+      <%= f.label :password_confirmation, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+      <div class="relative">
+        <%= f.password_field :password_confirmation, 
+              autocomplete: "new-password", 
+              data: { password_toggle_target: "input" }, 
+              class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 pl-3.5 pr-10 text-slate-800 outline-none transition" %>
+        
+        <button type="button" 
+                data-action="click->password-toggle#toggle" 
+                tabindex="-1"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition focus:outline-none">
+          <svg data-password-toggle-target="iconShow" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <svg data-password-toggle-target="iconHide" class="h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Actions -->
+  <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+    <% cancel_path = current_user.admin? ? admin_users_path : admin_root_path %>
+    <%= link_to t('admin.shared.cancel'), cancel_path, class: "px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition" %>
+    <%= f.submit class: "px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition cursor-pointer" %>
+  </div>
+<% end %>

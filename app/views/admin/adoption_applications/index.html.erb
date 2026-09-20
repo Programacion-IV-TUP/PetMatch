@@ -1,13 +1,13 @@
-<h2 class="text-2xl font-bold text-gray-800 mb-6">Solicitudes de Adopción</h2>
+<h2 class="text-2xl font-bold text-gray-800 mb-6"><%= t('admin.adoption_applications.index.title') %></h2>
 
 <div class="bg-white rounded shadow overflow-hidden">
   <table class="w-full text-left border-collapse">
     <thead class="bg-gray-50 border-b">
       <tr>
-        <th class="p-3 text-sm font-semibold text-gray-600">Mascota</th>
-        <th class="p-3 text-sm font-semibold text-gray-600">Solicitante</th>
-        <th class="p-3 text-sm font-semibold text-gray-600">Estado</th>
-        <th class="p-3 text-sm font-semibold text-gray-600">Acciones</th>
+        <th class="p-3 text-sm font-semibold text-gray-600"><%= t('admin.adoption_applications.index.table.pet') %></th>
+        <th class="p-3 text-sm font-semibold text-gray-600"><%= t('admin.adoption_applications.index.table.applicant') %></th>
+        <th class="p-3 text-sm font-semibold text-gray-600"><%= t('admin.adoption_applications.index.table.status') %></th>
+        <th class="p-3 text-sm font-semibold text-gray-600"><%= t('admin.adoption_applications.index.table.actions') %></th>
       </tr>
     </thead>
     <tbody class="divide-y">
@@ -21,7 +21,7 @@
             </span>
           </td>
           <td class="p-3">
-            <%= link_to "Revisar", admin_adoption_application_path(application), class: "text-indigo-600 hover:underline font-medium text-sm" %>
+            <%= link_to t('admin.adoption_applications.index.table.review'), admin_adoption_application_path(application), class: "text-indigo-600 hover:underline font-medium text-sm" %>
           </td>
         </tr>
       <% end %>

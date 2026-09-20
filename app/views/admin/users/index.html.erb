@@ -1,0 +1,63 @@
+<% content_for :page_title, t('.title') %>
+
+<div class="space-y-6">
+  <!-- Actions Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
+      <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
+    </div>
+    
+    <%= link_to new_admin_user_path, class: "inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm transition cursor-pointer self-start sm:self-auto" do %>
+      <span>➕</span> <%= t('.add_manager') %>
+    <% end %>
+  </div>
+
+  <!-- Users Table -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-slate-600">
+        <thead class="bg-slate-50 text-xs font-semibold text-slate-400 uppercase border-b border-slate-100">
+          <tr>
+            <th class="px-6 py-3.5"><%= t('.table.name') %></th>
+            <th class="px-6 py-3.5"><%= t('.table.email') %></th>
+            <th class="px-6 py-3.5 min-w-[160px]"><%= t('.table.role') %></th>
+            <th class="px-6 py-3.5"><%= t('.table.shelter') %></th>
+            <th class="px-6 py-3.5 text-right"><%= t('.table.actions') %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+          <% @users.each do |user| %>
+            <tr class="hover:bg-slate-50/50 transition">
+              <td class="py-4 px-6 font-bold text-slate-800">
+                <%= user.full_name %>
+              </td>
+              <td class="py-4 px-6 text-slate-600">
+                <%= user.email_address %>
+              </td>
+              <td class="py-4 px-6">
+                <span class="inline-block whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-semibold border <%= user.admin? ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200' %>">
+                  <%= t("activerecord.attributes.user/role.#{user.role}") %>
+                </span>
+              </td>
+              <td class="py-4 px-6 text-slate-600">
+                <%= user.shelter&.name || "-" %>
+              </td>
+
+              <!-- Actions -->
+              <td class="py-4 px-6 text-right space-x-2">
+                <%= link_to admin_user_path(user), class: "font-semibold text-blue-600 hover:text-blue-700" do %>
+                  <%= t('admin.shared.show') %>
+                <% end %>
+                <%= link_to t('admin.shared.edit'), edit_admin_user_path(user), class: "font-semibold text-emerald-600 hover:text-emerald-700" %>
+                <% unless user == current_user %>
+                  <%= link_to t('admin.shared.delete'), admin_user_path(user), data: { turbo_method: :delete, turbo_confirm: t('.table.confirm_delete', name: user.full_name) }, class: "font-semibold text-rose-600 hover:text-rose-700" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

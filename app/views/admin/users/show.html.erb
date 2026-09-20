@@ -1,0 +1,66 @@
+<% content_for :page_title, t('.title') %>
+
+<div class="max-w-3xl space-y-6">
+  <!-- Header con enlace de retorno dinámico -->
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
+      <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <% back_path = current_user.admin? ? admin_users_path : admin_root_path %>
+      <%= link_to t('admin.shared.back'), back_path, class: "px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition" %>
+      <%= link_to t('admin.shared.edit'), edit_admin_user_path(@user), class: "px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition" %>
+    </div>
+  </div>
+
+  <!-- User Detail Card -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden p-6 md:p-8 space-y-6">
+    <!-- User Header Brief -->
+    <div class="flex items-center gap-4 border-b border-slate-100 pb-6">
+      <% if @user.avatar.attached? %>
+        <%= image_tag @user.avatar, class: "w-20 h-20 rounded-full object-cover border border-slate-200 shadow-sm" %>
+      <% else %>
+        <div class="w-20 h-20 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-2xl">
+          <%= @user.first_name&.first || "U" %>
+        </div>
+      <% end %>
+
+      <div>
+        <h4 class="text-lg font-bold text-slate-800"><%= @user.full_name %></h4>
+        <p class="text-xs text-slate-500"><%= @user.email_address %></p>
+        <div class="mt-2">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold border <%= @user.admin? ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200' %>">
+            <%= t("activerecord.attributes.user/role.#{@user.role}") %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Information Grid -->
+    <dl class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+      <div>
+        <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.user.first_name') %></dt>
+        <dd class="text-slate-800 font-semibold mt-1 text-sm"><%= @user.first_name %></dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.user.last_name') %></dt>
+        <dd class="text-slate-800 font-semibold mt-1 text-sm"><%= @user.last_name %></dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.user.email_address') %></dt>
+        <dd class="text-slate-800 font-semibold mt-1 text-sm"><%= @user.email_address %></dd>
+      </div>
+
+      <div>
+        <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.user.shelter_id') %></dt>
+        <dd class="text-slate-800 font-semibold mt-1 text-sm">
+          <%= @user.shelter&.name || t('.no_shelter', default: 'Sin refugio asignado') %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

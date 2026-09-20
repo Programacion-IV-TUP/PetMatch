@@ -39,8 +39,26 @@
               <span>📋</span> <%= t('admin.shared.applications') %>
             <% end %>
 
-            <%= link_to admin_shelters_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_shelters_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-              <span>🏠</span> <%= t('admin.shared.shelters') %>
+            <% if current_user.admin? %>
+              <%= link_to admin_shelters_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_shelters_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+                <span>🏠</span> <%= t('admin.shared.shelters') %>
+              <% end %>
+
+              <%= link_to admin_users_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_users_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+                <span>👥</span> <%= t('admin.shared.users') %>
+              <% end %>
+            <% elsif current_user.shelter_manager? %>
+              <% if current_user.shelter.present? %>
+                <% shelter_edit_path = edit_admin_shelter_path(current_user.shelter) %>
+                <%= link_to shelter_edit_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(shelter_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+                  <span>🏠</span> <%= t('admin.shared.my_shelter') %>
+                <% end %>
+              <% end %>
+
+              <% profile_edit_path = edit_admin_user_path(current_user) %>
+              <%= link_to profile_edit_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(profile_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+                <span>👤</span> <%= t('admin.shared.profile') %>
+              <% end %>
             <% end %>
           </nav>
         </div>

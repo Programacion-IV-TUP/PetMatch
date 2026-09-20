@@ -1,5 +1,5 @@
 class Shelter < ApplicationRecord
-  belongs_to :address
+  belongs_to :address, autosave: true
 
   has_many :users
   has_many :pets, dependent: :destroy
@@ -7,6 +7,8 @@ class Shelter < ApplicationRecord
   has_many :medical_records, through: :pets
   has_one_attached :logo
   has_many_attached :photos
+
+  accepts_nested_attributes_for :address, update_only: true
 
   validates :name, presence: true
   validates :email, presence: true

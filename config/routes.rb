@@ -13,18 +13,20 @@ Rails.application.routes.draw do
       get "pets/show"
     end
   end
-  namespace :admin do
-    root to: "pets#index"
+namespace :admin do
+  root to: "pets#index"
 
-    resources :shelters
-    resources :cities, except: %i[show]
-    resources :breeds, except: %i[show]
-    resources :adoption_applications, only: %i[index show edit update]
-    resources :pets do
-      resources :medical_records, only: %i[new create]
-    end
-    resources :medical_records, only: %i[index show edit update destroy]
+  resources :users
+  resources :shelters
+  resources :cities, except: %i[show]
+  resources :breeds, except: %i[show]
+  resources :adoption_applications, only: %i[index show edit update]
+
+  resources :pets do
+    resources :medical_records, only: %i[new create]
   end
+  resources :medical_records, only: %i[index show edit update destroy]
+end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
