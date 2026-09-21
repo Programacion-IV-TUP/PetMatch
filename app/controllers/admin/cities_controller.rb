@@ -1,33 +1,21 @@
-# app/controllers/admin/cities_controller.rb
 module Admin
   class CitiesController < ApplicationController
-    before_action :ensure_global_admin!
-    before_action :set_city, only: %i[edit update destroy]
+    before_action :set_city, only: %i[destroy]
+    before_action :authorize_admin!, only: %i[destroy] # Solo el Admin puede eliminar
 
     def index
-      @cities = City.order(name: :asc)
-    end
-
-    def new
+      @cities = City.order(:name)
       @city = City.new
     end
 
     def create
       @city = City.new(city_params)
+
       if @city.save
         redirect_to admin_cities_path, notice: t(".success")
       else
-        render :new, status: :unprocessable_entity
-      end
-    end
-
-    def edit; end
-
-    def update
-      if @city.update(city_params)
-        redirect_to admin_cities_path, notice: t(".success")
-      else
-        render :edit, status: :unprocessable_entity
+        @cities = City.order(:name)
+        render :index, status: :unprocessable_entity
       end
     end
 
@@ -35,7 +23,7 @@ module Admin
       if @city.destroy
         redirect_to admin_cities_path, notice: t(".success")
       else
-        redirect_to admin_cities_path, alert: t("errors.has_dependencies")
+        redirect_to admin_cities_path, alert: t(".cannot_delete")
       end
     end
 
@@ -43,6 +31,12 @@ module Admin
 
     def set_city
       @city = City.find(params[:id])
+    end
+
+    def authorize_admin!
+      unless current_user&.admin?
+        redirect_to admin_cities_path, alert: t("admin.shared.unauthorized")
+      end
     end
 
     def city_params

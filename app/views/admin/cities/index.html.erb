@@ -1,0 +1,84 @@
+<% content_for :page_title, t('.title') %>
+
+<div class="max-w-4xl space-y-6">
+  <!-- Header -->
+  <div>
+    <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
+    <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
+  </div>
+
+  <!-- Formulario de Alta Inline -->
+  <%= form_with(model: [:admin, @city], local: true, class: "bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4") do |f| %>
+    <% if @city.errors.any? %>
+      <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-medium space-y-1">
+        <p class="font-bold text-sm"><%= t('admin.shared.form_error_header') %></p>
+        <ul class="list-disc list-inside space-y-0.5">
+          <% @city.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+      <!-- Nombre de la Ciudad -->
+      <div>
+        <%= f.label :name, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+        <%= f.text_field :name, placeholder: t('.name_placeholder'), class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+      </div>
+
+      <!-- Provincia / Estado -->
+      <div>
+        <%= f.label :state, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
+        <%= f.text_field :state, placeholder: t('.state_placeholder'), class: "w-full rounded-xl border border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-sm py-2.5 px-3.5 text-slate-800 outline-none transition" %>
+      </div>
+
+      <!-- Botón de Envío -->
+      <div>
+        <%= f.submit t('.create_button'), class: "w-full px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition cursor-pointer" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Tabla de Ciudades -->
+  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-slate-50 text-xs font-semibold text-slate-400 uppercase border-b border-slate-100">
+        <tr>
+          <th class="px-6 py-3.5"><%= t('.table.name') %></th>
+          <th class="px-6 py-3.5"><%= t('.table.state') %></th>
+          <% if current_user.admin? %>
+            <th class="px-6 py-3.5 text-right"><%= t('.table.actions') %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+        <% if @cities.any? %>
+          <% @cities.each do |city| %>
+            <tr class="hover:bg-slate-50/50 transition">
+              <td class="py-4 px-6 font-semibold text-slate-800"><%= city.name %></td>
+              <td class="py-4 px-6 text-slate-500"><%= city.state.presence || '-' %></td>
+              <% if current_user.admin? %>
+                <td class="py-4 px-6 text-right">
+                  <%= link_to t('admin.shared.delete'), 
+                              admin_city_path(city), 
+                              data: { 
+                                turbo_method: :delete, 
+                                turbo_confirm: t('.table.confirm_delete', name: city.name) 
+                              }, 
+                              class: "font-semibold text-rose-600 hover:text-rose-700 transition" %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td colspan="<%= current_user.admin? ? 3 : 2 %>" class="py-8 px-6 text-center text-slate-400 font-medium">
+              <%= t('.empty') %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

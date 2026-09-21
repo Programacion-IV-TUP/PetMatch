@@ -60,6 +60,14 @@
                 <span>👤</span> <%= t('admin.shared.profile') %>
               <% end %>
             <% end %>
+
+            <%= link_to admin_breeds_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_breeds_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+              <span>🏷️</span> <%= t('admin.shared.breeds') %>
+            <% end %>
+
+            <%= link_to admin_cities_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_cities_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
+              <span>📍</span> <%= t('admin.shared.cities') %>
+            <% end %>
           </nav>
         </div>
 

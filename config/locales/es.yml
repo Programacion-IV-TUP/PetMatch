@@ -141,6 +141,8 @@ es:
       my_shelter: "Mi Refugio"
       users: "Usuarios"
       profile: "Mi Perfil"
+      breeds: "Razas"
+      cities: "Ciudades"
       logout: "Salir"
       system_active: "Sistema Online"
       cancel: "Cancelar"
@@ -302,20 +304,42 @@ es:
         error: "No se puede eliminar la dirección porque tiene datos asociados."
 
     cities:
+      index:
+        title: "Gestión de Ciudades"
+        header: "Ciudades Registradas"
+        subtitle: "Administrá las localidades disponibles para las direcciones de usuarios y refugios."
+        name_placeholder: "Ej: La Plata"
+        state_placeholder: "Ej: Buenos Aires"
+        create_button: "Agregar Ciudad"
+        empty: "No hay ciudades registradas aún."
+        table:
+          name: "Ciudad"
+          state: "Provincia / Estado"
+          actions: "Acciones"
+          confirm_delete: "¿Estás seguro de eliminar la ciudad %{name}?"
       create:
-        success: "Ciudad creada correctamente."
-      update:
-        success: "Ciudad actualizada correctamente."
+        success: "Ciudad registrada correctamente."
       destroy:
-        success: "Ciudad eliminada del sistema."
+        success: "Ciudad eliminada correctamente."
+        cannot_delete: "No se puede eliminar la ciudad porque hay direcciones asociadas a ella."
 
     breeds:
+      index:
+        title: "Gestión de Razas"
+        header: "Razas Registradas"
+        subtitle: "Administrá las razas disponibles para la clasificación de mascotas."
+        name_placeholder: "Ej: Ovejero Alemán, Mestizo, Siames..."
+        create_button: "Agregar Raza"
+        empty: "No hay razas registradas aún."
+        table:
+          name: "Raza"
+          actions: "Acciones"
+          confirm_delete: "¿Estás seguro de eliminar la raza %{name}?"
       create:
-        success: "Raza creada correctamente."
-      update:
-        success: "Raza actualizada correctamente."
+        success: "Raza registrada correctamente."
       destroy:
-        success: "Raza eliminada del sistema."
+        success: "Raza eliminada correctamente."
+        cannot_delete: "No se puede eliminar la raza porque hay mascotas asociadas a ella."
 
     users:
       index:

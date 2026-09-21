@@ -141,6 +141,8 @@ en:
       my_shelter: "My Shelter"
       users: "Users"
       profile: "My Profile"
+      breeds: "Breeds"
+      cities: "Cities"
       logout: "Log out"
       system_active: "System Active"
       cancel: "Cancel"
@@ -300,20 +302,42 @@ en:
         error: "Cannot delete address because it has associated data."
 
     cities:
+      index:
+        title: "City Management"
+        header: "Registered Cities"
+        subtitle: "Manage the localities available for users and shelters' addresses."
+        name_placeholder: "Eg: La Plata"
+        state_placeholder: "Eg: Buenos Aires"
+        create_button: "Add City"
+        empty: "No cities registered yet."
+        table:
+          name: "City"
+          state: "Province / State"
+          actions: "Actions"
+          confirm_delete: "Are you sure you want to delete the city %{name}?"
       create:
-        success: "City created successfully."
-      update:
-        success: "City updated successfully."
+        success: "City registered successfully."
       destroy:
-        success: "City removed successfully."
+        success: "City deleted successfully."
+        cannot_delete: "Cannot delete city because there are addresses associated with it."
 
     breeds:
+      index:
+        title: "Breed Management"
+        header: "Breeds List"
+        subtitle: "Manage the breeds available for pet classification."
+        name_placeholder: "Eg: German Shepherd, Mixed, Siamese..."
+        create_button: "Add Breed"
+        empty: "No breeds registered yet."
+        table:
+          name: "Breed"
+          actions: "Actions"
+          confirm_delete: "Are you sure you want to delete the breed %{name}?"
       create:
-        success: "Breed created successfully."
-      update:
-        success: "Breed updated successfully."
+        success: "Breed registered successfully."
       destroy:
         success: "Breed removed successfully."
+        cannot_delete: "Cannot delete breed because there are pets associated with it."
 
     users:
       index:

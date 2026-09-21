@@ -26,6 +26,8 @@ namespace :admin do
     resources :medical_records, only: %i[new create]
   end
   resources :medical_records, only: %i[index show edit update destroy]
+  resources :breeds, only: %i[index create destroy]
+  resources :cities, only: %i[index create destroy]
 end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
