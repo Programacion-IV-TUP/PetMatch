@@ -58,7 +58,7 @@
       <div>
         <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.user.shelter_id') %></dt>
         <dd class="text-slate-800 font-semibold mt-1 text-sm">
-          <%= @user.shelter&.name || t('.no_shelter', default: 'Sin refugio asignado') %>
+          <%= @user.shelter&.name || t('.no_shelter') %>
         </dd>
       </div>
     </dl>

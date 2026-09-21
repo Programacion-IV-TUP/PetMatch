@@ -17,7 +17,7 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Info Sidebar -->
     <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-      <h4 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3"><%= t('admin.shelters.show.details') %></h4>
+      <h4 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-3"><%= t('.details') %></h4>
       <dl class="space-y-3 text-xs">
         <div>
           <dt class="text-slate-400 font-medium"><%= t('activerecord.attributes.shelter.city') %></dt>
@@ -37,7 +37,7 @@
     <!-- Associated Pets -->
     <div class="md:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h4 class="text-sm font-bold text-slate-800">🐾 <%= t('admin.shelters.show.pets') %></h4>
+        <h4 class="text-sm font-bold text-slate-800">🐾 <%= t('.pets') %></h4>
         <span class="text-xs font-semibold text-slate-500"><%= @shelter.pets.count rescue 0 %> registradas</span>
       </div>
 
@@ -66,7 +66,7 @@
         </div>
       <% else %>
         <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
-          <%= t('admin.shelters.show.no_pets') %>
+          <%= t('.no_pets') %>
         </div>
       <% end %>
     </div>

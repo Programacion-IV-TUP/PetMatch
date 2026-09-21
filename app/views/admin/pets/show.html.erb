@@ -1,4 +1,4 @@
-<% content_for :page_title, t('admin.pets.show.title') %>
+<% content_for :page_title, t('.title') %>
 
 <div class="max-w-4xl mx-auto space-y-6">
   <!-- Top header -->
@@ -27,7 +27,7 @@
 
   <!-- Active Storage Photos Gallery -->
   <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-    <h4 class="text-sm font-bold text-slate-800"><%= t('admin.pets.show.photos') %></h4>
+    <h4 class="text-sm font-bold text-slate-800"><%= t('.photos') %></h4>
     <% if @pet.photos.attached? %>
       <!-- Grid with explicit card sizing -->
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -39,14 +39,14 @@
       </div>
     <% else %>
       <div class="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
-        📷 <%= t('admin.pets.show.no_photos') %>
+        📷 <%= t('.no_photos') %>
       </div>
     <% end %>
   </div>
 
   <!-- General Info -->
   <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
-    <h4 class="text-sm font-bold text-slate-800"><%= t('admin.pets.show.general_info') %></h4>
+    <h4 class="text-sm font-bold text-slate-800"><%= t('.general_info') %></h4>
     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
       <div>
         <dt class="text-slate-400 font-medium mb-0.5"><%= t('activerecord.attributes.breed.species') %></dt>

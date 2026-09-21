@@ -48,7 +48,8 @@ es:
         title: "Título / Diagnóstico"
         description: "Descripción / Observaciones"
         performed_at: "Fecha de aplicación"
-        next_due_at: "Próxima aplicación"
+        next_due_date: "Próxima aplicación"
+        notes: "Notas"
 
       shelter:
         name: "Nombre"

@@ -48,7 +48,8 @@ en:
         title: "Title / Diagnosis"
         description: "Description / Notes"
         performed_at: "Date Administered"
-        next_due_at: "Next Due Date"
+        next_due_date: "Next Due Date"
+        notes: "Notes"
 
       shelter:
         name: "Name"
