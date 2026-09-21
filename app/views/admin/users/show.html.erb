@@ -4,13 +4,12 @@
   <!-- Header con enlace de retorno dinámico -->
   <div class="flex items-center justify-between gap-4">
     <div>
+      <% back_path = current_user.admin? ? admin_users_path : admin_root_path %>
+      <%= link_to t('admin.shared.back'), back_path, class: "text-xs text-emerald-600 hover:text-emerald-700 font-semibold mb-1 inline-block" %>
       <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
-      <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
     </div>
 
     <div class="flex items-center gap-3">
-      <% back_path = current_user.admin? ? admin_users_path : admin_root_path %>
-      <%= link_to t('admin.shared.back'), back_path, class: "px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition" %>
       <%= link_to t('admin.shared.edit'), edit_admin_user_path(@user), class: "px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition" %>
     </div>
   </div>

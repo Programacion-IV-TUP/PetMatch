@@ -2,8 +2,9 @@
 
 <div class="max-w-3xl space-y-6">
   <div>
+    <% back_path = current_user.admin? ? admin_users_path : admin_root_path %>
+    <%= link_to t('admin.shared.back'), back_path, class: "text-xs text-emerald-600 hover:text-emerald-700 font-semibold mb-1 inline-block" %>
     <h3 class="text-xl font-bold text-slate-800"><%= t('.header') %></h3>
-    <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
   </div>
 
   <%= render "form", user: @user %>

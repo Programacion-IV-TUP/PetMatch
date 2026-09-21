@@ -160,6 +160,7 @@ es:
       update:
         success: "Mascota actualizada correctamente."
       destroy:
+        confirm_delete: "¿Confirmás eliminar a %{name}?"
         success: "Mascota eliminada del sistema."
 
       index:
@@ -178,7 +179,6 @@ es:
           edit: "Editar"
           show: "Ver detalle"
           delete: "Eliminar"
-          confirm_delete: "¿Confirmás eliminar a %{name}?"
 
       new:
         title: "Nueva Mascota"
@@ -194,6 +194,7 @@ es:
         no_photos: "Sin fotografías cargadas"
         general_info: "Información General"
         back_to_shelter: "← Volver al refugio"
+        back_to_application: "← Volver a la Solicitud"
 
       form:
         photos_label: "Fotos de la mascota (máximo 5)"
@@ -230,15 +231,15 @@ es:
         title: "Nuevo Registro Médico"
         header: "Nuevo Registro Médico para %{name}"
         add_record: "Agregar Registro Médico"
-        back: "Volver a %{pet}"
+        back: "← Volver a %{pet}"
       edit:
         title: "Editar Registro Médico"
         header: "Editar Registro Médico para %{name}"
-        back: "Volver a %{pet}"
+        back: "← Volver a %{pet}"
       index:
         title: "Registros Médicos"
         header: "Historial Médico de %{name}"
-        back: "Volver a %{pet}"
+        back: "← Volver a %{pet}"
         no_records: "No hay registros médicos para esta mascota."
         add_record: "Agregar Registro Médico"
       create:
@@ -329,10 +330,15 @@ es:
           shelter: "Refugio"
           actions: "Acciones"
           confirm_delete: "¿Estás seguro de eliminar el usuario %{name}?"
+      show:
+        title: "Perfil de Usuario"
+        header: "Datos de Usuario"
       new:
-        title: "Crear Encargado de Refugio"
+        title: "Nuevo Usuario"
+        header: "Registrar Nuevo Usuario"
       edit:
         title: "Editar Usuario"
+        header: "Editar Usuario: %{name}"
       form:
         address_section: "Datos de Dirección"
         no_shelter: "Sin refugio asignado"

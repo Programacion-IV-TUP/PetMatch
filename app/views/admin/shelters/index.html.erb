@@ -49,7 +49,7 @@
               <td class="py-4 px-6 text-right space-x-2">
                 <%= link_to t('admin.shared.show'), admin_shelter_path(shelter), class: "font-semibold text-slate-600 hover:text-slate-900 transition" %>
                 <%= link_to t('admin.shared.edit'), edit_admin_shelter_path(shelter), class: "font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
-                <%= button_to t('admin.shared.delete'), admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelter.destroy.confirm') }, class: "inline-block font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
+                <%= button_to t('admin.shared.delete'), admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelters.destroy.confirm', name: shelter.name) }, class: "inline-block font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
               </td>
             </tr>
           <% end %>

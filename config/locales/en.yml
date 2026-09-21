@@ -159,6 +159,7 @@ en:
       update:
         success: "Pet successfully updated."
       destroy:
+        confirm_delete: "Are you sure you want to delete %{name}?"
         success: "Pet removed from system."
 
       index:
@@ -177,7 +178,6 @@ en:
           edit: "Edit"
           show: "View Details"
           delete: "Delete"
-          confirm_delete: "Are you sure you want to delete %{name}?"
 
       new:
         title: "New Pet"
@@ -193,6 +193,7 @@ en:
         no_photos: "No photos uploaded"
         general_info: "General Information"
         back_to_shelter: "← Back to shelter"
+        back_to_application: "← Back to Application"
 
       form:
         photos_label: "Pet photos (maximum 5)"
@@ -229,15 +230,15 @@ en:
         title: "New Medical Record"
         header: "New Medical Record for %{name}"
         add_record: "Add Medical Record"
-        back: "Back to %{pet}"
+        back: "← Back to %{pet}"
       edit:
         title: "Edit Medical Record"
         header: "Edit Medical Record for %{name}"
-        back: "Back to %{pet}"
+        back: "← Back to %{pet}"
       index:
         title: "Medical Records"
         header: "Medical History of %{name}"
-        back: "Back to %{pet}"
+        back: "← Back to %{pet}"
         no_records: "No medical records for this pet."
         add_record: "Add Medical Record"
       create:
@@ -327,10 +328,15 @@ en:
           shelter: "Shelter"
           actions: "Actions"
           confirm_delete: "Are you sure you want to delete the user %{name}?"
+      show:
+        title: "User Profile"
+        header: "User Data"
       new:
-        title: "Create Shelter Manager"
+        title: "New User"
+        header: "Register New User"
       edit:
         title: "Edit User"
+        header: "Edit User: %{name}"
       form:
         address_section: "Address Information"
         no_shelter: "No shelter assigned"
