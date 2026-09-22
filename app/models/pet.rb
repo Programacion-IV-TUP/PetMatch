@@ -20,6 +20,29 @@ class Pet < ApplicationRecord
   validates :size, presence: true
   validates :photos, content_type: [ "image/png", "image/jpeg", "image/webp" ], size: { less_than: 5.megabytes }, limit: { max: 5 }
 
+  # Soft delete scopes
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
+  # Search & Filter scopes
+  scope :search_by_name, ->(query) { where("LOWER(name) LIKE ?", "%#{query.downcase}%") if query.present? }
+  scope :by_status, ->(status) { where(status: status) if status.present? }
+  scope :by_active_status, ->(active_param) {
+    case active_param
+    when "true"  then active
+    when "false" then inactive
+    else all
+    end
+  }
+
+  def deactivate!
+    update!(active: false)
+  end
+
+  def activate!
+    update!(active: true)
+  end
+
   def age_years
     return 0 if age_months.blank?
 

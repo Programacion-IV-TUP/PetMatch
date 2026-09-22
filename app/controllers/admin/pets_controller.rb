@@ -2,8 +2,15 @@ module Admin
   class PetsController < ApplicationController
     before_action :set_pet, only: %i[show edit update destroy]
 
-    def index
-      @pagy, @pets = pagy(scoped_pets.includes(:breed, :shelter).order(created_at: :desc), items: 10)
+def index
+      pets = scoped_pets
+               .includes(:breed, :shelter)
+               .search_by_name(params[:query])
+               .by_status(params[:status])
+               .by_active_status(params[:active])
+               .order(created_at: :desc)
+
+      @pagy, @pets = pagy(pets, items: 10)
     end
 
     def show
@@ -36,7 +43,7 @@ module Admin
 
     def update
       if @pet.update(pet_params)
-        redirect_to admin_pet_path(@pet), notice: t(".success")
+        redirect_to admin_pets_path, notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -63,7 +70,8 @@ module Admin
 
     def pet_params
       params.require(:pet).permit(
-        :name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id, photos: [])
+        :name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id, :active, photos: []
+      )
     end
   end
 end

@@ -210,6 +210,10 @@ en:
     adoption_applications:
       update:
         success: "Application status successfully updated."
+        error: "Could not update the application."
+
+      auto_notes:
+        rejected_by_adoption: "Automatically rejected: pet was adopted by another applicant."
 
       index:
         title: "Adoption Applications"

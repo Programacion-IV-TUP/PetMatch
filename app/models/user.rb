@@ -20,6 +20,28 @@ class User < ApplicationRecord
   validates :avatar, content_type: [ "image/png", "image/jpeg", "image/webp" ], size: { less_than: 5.megabytes }
   validates :password, length: { minimum: 6 }, allow_nil: true, if: :password_required?
 
+  # Soft delete scopes
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
+  # Search & Filter scopes
+  scope :search_by_text, ->(query) {
+    if query.present?
+      pattern = "%#{query.downcase}%"
+      where("LOWER(first_name) LIKE :q OR LOWER(last_name) LIKE :q OR LOWER(email_address) LIKE :q", q: pattern)
+    end
+  }
+
+  scope :by_role, ->(role_param) { where(role: role_param) if role_param.present? }
+
+  scope :by_active_status, ->(active_param) {
+    case active_param
+    when "true"  then active
+    when "false" then inactive
+    else all
+    end
+  }
+
   def full_name
     "#{first_name} #{last_name}".strip
   end

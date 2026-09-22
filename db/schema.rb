@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_22_205905) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -60,7 +60,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
     t.string "status"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["pet_id", "status"], name: "index_adoption_applications_on_pet_id_and_status"
     t.index ["pet_id"], name: "index_adoption_applications_on_pet_id"
+    t.index ["status"], name: "index_adoption_applications_on_status"
     t.index ["user_id"], name: "index_adoption_applications_on_user_id"
   end
 
@@ -84,7 +86,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["pet_id"], name: "index_favorites_on_pet_id"
-    t.index ["user_id"], name: "index_favorites_on_user_id"
+    t.index ["user_id", "pet_id"], name: "index_favorites_on_user_id_and_pet_id", unique: true
   end
 
   create_table "medical_records", force: :cascade do |t|
@@ -100,6 +102,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
   end
 
   create_table "pets", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
     t.integer "age_months"
     t.integer "breed_id", null: false
     t.datetime "created_at", null: false
@@ -111,8 +114,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
     t.string "status"
     t.datetime "updated_at", null: false
     t.float "weight"
+    t.index ["active"], name: "index_pets_on_active"
     t.index ["breed_id"], name: "index_pets_on_breed_id"
+    t.index ["shelter_id", "status"], name: "index_pets_on_shelter_id_and_status"
     t.index ["shelter_id"], name: "index_pets_on_shelter_id"
+    t.index ["status"], name: "index_pets_on_status"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -125,6 +131,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
   end
 
   create_table "shelters", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
     t.integer "address_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
@@ -133,6 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
     t.string "phone"
     t.datetime "updated_at", null: false
     t.string "website"
+    t.index ["active"], name: "index_shelters_on_active"
     t.index ["address_id"], name: "index_shelters_on_address_id"
   end
 
@@ -148,6 +156,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_20_004338) do
     t.string "role", default: "adopter", null: false
     t.integer "shelter_id"
     t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_users_on_active"
     t.index ["address_id"], name: "index_users_on_address_id"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["shelter_id"], name: "index_users_on_shelter_id"

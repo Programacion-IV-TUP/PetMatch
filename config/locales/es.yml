@@ -211,6 +211,10 @@ es:
     adoption_applications:
       update:
         success: "Estado de la solicitud actualizado correctamente."
+        error: "No se pudo actualizar la solicitud."
+        
+      auto_notes:
+        rejected_by_adoption: "Rechazada automáticamente: la mascota fue adoptada por otro solicitante."
 
       index:
         title: "Solicitudes de Adopción"
