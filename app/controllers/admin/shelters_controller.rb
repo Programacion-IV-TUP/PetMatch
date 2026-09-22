@@ -6,7 +6,7 @@ module Admin
     before_action :authorize_shelter_access!, only: %i[show edit update]
 
     def index
-      @shelters = Shelter.includes(address: :city).order(:name)
+      @pagy, @shelters = pagy(Shelter.includes(address: :city).order(:name), items: 10)
     end
 
     def show

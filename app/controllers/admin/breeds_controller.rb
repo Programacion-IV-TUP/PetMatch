@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_admin!, only: %i[destroy] # Solo el Admin puede eliminar
 
     def index
-      @breeds = Breed.order(:name)
+      @pagy, @breeds = pagy(Breed.order(:name), items: 10)
       @breed = Breed.new
     end
 

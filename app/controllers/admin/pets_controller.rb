@@ -3,13 +3,21 @@ module Admin
     before_action :set_pet, only: %i[show edit update destroy]
 
     def index
-      @pets = scoped_pets.includes(:breed, :shelter)
+      @pagy, @pets = pagy(scoped_pets.includes(:breed, :shelter).order(created_at: :desc), items: 10)
     end
 
     def show
       # Adds the relations to generate fast access in the admin panel
-      @adoption_applications = @pet.adoption_applications.includes(:user).order(created_at: :desc)
-      @medical_records = @pet.medical_records.order(performed_at: :desc)
+      @pagy_adoption_applications, @adoption_applications = pagy(
+        @pet.adoption_applications.includes(:user).order(created_at: :desc),
+        items: 5,
+        page_param: :adoption_applications_page
+      )
+      @pagy_medical_records, @medical_records = pagy(
+        @pet.medical_records.order(performed_at: :desc),
+        items: 5,
+        page_param: :medical_records_page
+      )
     end
 
     def new

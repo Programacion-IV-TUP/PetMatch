@@ -5,7 +5,7 @@ module Admin
     before_action :authorize_user_access!, only: %i[show edit update]
 
     def index
-      @users = User.includes(:address, :shelter).order(:last_name, :first_name)
+      @pagy, @users = pagy(User.includes(:address, :shelter).order(:last_name, :first_name), items: 10)
     end
 
     def show

@@ -4,7 +4,7 @@ module Admin
     before_action :authorize_admin!, only: %i[destroy] # Solo el Admin puede eliminar
 
     def index
-      @cities = City.order(:name)
+      @pagy, @cities = pagy(City.order(:name), items: 10)
       @city = City.new
     end
 

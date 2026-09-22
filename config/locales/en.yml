@@ -154,6 +154,11 @@ en:
       show: "Details"
       actions: "Actions"
       form_error_header: "Please correct the following errors:"
+      pagination:
+        showing: "Showing %{from} to %{to} of %{count} results"
+        previous: "Previous"
+        next: "Next"
+        page_info: "Page %{page} of %{pages}"
 
     pets:
       create:

@@ -9,6 +9,9 @@ gem "tailwindcss-rails"
 
 gem "active_storage_validations"
 
+# Pagination
+gem "pagy", "~> 8.4"
+
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
