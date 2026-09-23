@@ -10,7 +10,7 @@ gem "tailwindcss-rails"
 gem "active_storage_validations"
 
 # Pagination
-gem "pagy", "~> 8.4"
+gem "pagy", "~> 43.6"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
