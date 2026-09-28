@@ -14,7 +14,8 @@ module Admin
       if @city.save
         redirect_to admin_cities_path, notice: t(".success")
       else
-        @cities = City.order(:name)
+        @pagy, @cities = pagy(City.order(:name), items: 10)
+        flash.now[:alert] = t("admin.shared.form_error_header")
         render :index, status: :unprocessable_entity
       end
     end

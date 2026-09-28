@@ -14,7 +14,8 @@ module Admin
       if @breed.save
         redirect_to admin_breeds_path, notice: t(".success")
       else
-        @breeds = Breed.order(:name)
+        @pagy, @breeds = pagy(Breed.order(:name), items: 10)
+        flash.now[:alert] = t("admin.shared.form_error_header")
         render :index, status: :unprocessable_entity
       end
     end

@@ -1,0 +1,35 @@
+<div id="flash_messages">
+  <% if flash.any? %>
+    <div class="space-y-3 mb-6">
+      <% flash.each do |type, message| %>
+        <% 
+          bg_class, border_class, text_class, icon = case type.to_sym
+          when :notice, :success
+            ['bg-emerald-50', 'border-emerald-200', 'text-emerald-800', '✅']
+          when :alert, :error
+            ['bg-rose-50', 'border-rose-200', 'text-rose-800', '⚠️']
+          when :warning
+            ['bg-amber-50', 'border-amber-200', 'text-amber-800', '🔔']
+          else
+            ['bg-slate-50', 'border-slate-200', 'text-slate-800', 'ℹ️']
+          end 
+        %>
+
+        <div class="p-4 rounded-xl border shadow-xs flex items-center justify-between gap-3 text-xs font-semibold transition-all duration-300 <%= bg_class %> <%= border_class %> <%= text_class %>"
+             data-controller="flash"
+             data-flash-target="notification">
+          <div class="flex items-center gap-2">
+            <span class="text-base select-none"><%= icon %></span>
+            <p class="leading-relaxed"><%= message %></p>
+          </div>
+
+          <button type="button" 
+                  class="text-xs font-bold opacity-60 hover:opacity-100 transition ml-4 cursor-pointer"
+                  data-action="click->flash#close">
+            ✕
+          </button>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

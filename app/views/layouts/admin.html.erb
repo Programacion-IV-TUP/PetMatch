@@ -111,11 +111,7 @@
 
         <!-- Scrollable Body Content -->
         <div class="p-6 md:p-8 flex-1 overflow-y-auto">
-          <% if flash[:notice] %>
-            <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-medium flex items-center gap-2">
-              <span>✅</span> <%= flash[:notice] %>
-            </div>
-          <% end %>
+          <%= render "admin/shared/flash" %>
 
           <%= yield %>
         </div>

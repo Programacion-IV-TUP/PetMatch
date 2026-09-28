@@ -9,7 +9,10 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-  <body class="h-full font-sans antialiased text-slate-700">
-    <%= yield %>
+  <body class="h-full font-sans antialiased text-slate-700 flex items-center justify-center p-4">
+    <main class="w-full max-w-md mx-auto space-y-4">
+      <%= render "admin/shared/flash" %>
+      <%= yield %>
+    </main>
   </body>
 </html>
