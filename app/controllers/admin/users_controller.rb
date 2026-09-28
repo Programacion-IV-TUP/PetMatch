@@ -5,7 +5,13 @@ module Admin
     before_action :authorize_user_access!, only: %i[show edit update]
 
     def index
-      @pagy, @users = pagy(User.includes(:address, :shelter).order(:last_name, :first_name), items: 10)
+      users = User.includes(:address, :shelter)
+                  .search_by_text(params[:query])
+                  .by_role(params[:role])
+                  .by_active_status(params[:active])
+                  .order(:last_name, :first_name)
+
+      @pagy, @users = pagy(users, items: 10)
     end
 
     def show
@@ -72,6 +78,7 @@ module Admin
     end
 
     def user_params
+      # Basic profile params allowed for any user editing their own profile
       allowed_params = [
         :first_name,
         :last_name,
@@ -83,7 +90,8 @@ module Admin
         address_attributes: %i[id street number floor apartment zip_code city_id]
       ]
 
-      allowed_params += %i[role shelter_id] if current_user&.admin?
+      # Admin-only elevated permissions (Active status, Role, Shelter mapping)
+      allowed_params += %i[active role shelter_id] if current_user&.admin?
 
       params.require(:user).permit(allowed_params)
     end

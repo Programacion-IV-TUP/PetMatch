@@ -1,10 +1,15 @@
 es:
   # ==========================================
-  # 1. TRADUCCIONES DE ERRORES
+  # 1. TRADUCCIONES DE ERRORES Y SESIONES
   # ==========================================
   errors:
     unauthorized: "No tienes permisos para realizar esta acción."
     has_dependencies: "No se puede eliminar el registro porque tiene datos asociados."
+
+  sessions:
+    account_inactive: "Tu cuenta se encuentra inactiva. Comunícate con un administrador."
+    account_deactivated: "Tu sesión ha sido finalizada o tu cuenta se encuentra inactiva."
+    invalid_credentials: "Email o contraseña incorrectos."
 
   # ==========================================
   # 2. MODELOS, ATRIBUTOS Y ENUMS (DOMINIO / API / VISTAS)
@@ -36,6 +41,7 @@ es:
         breed: "Raza"
         shelter: "Refugio"
         photos: "Fotografías"
+        active: "Activo"
       
       adoption_application:
         status: "Estado de la solicitud"
@@ -61,6 +67,7 @@ es:
         description: "Descripción"
         logo: "Logo"
         photos: "Imágenes"
+        active: "Activo"
 
       address:
         street: "Calle"
@@ -87,10 +94,12 @@ es:
         password_confirmation: "Confirmar contraseña"
         role: "Rol"
         shelter_id: "Refugio asignado"
+        active: "Activo"
 
       user/role:
         admin: "Administrador"
         shelter_manager: "Encargado de Refugio"
+        adopter: "Adoptante"
 
       # ------------------------------------------
       # Atributos de Dominio y Enums
@@ -154,7 +163,15 @@ es:
       confirm_delete: "¿Confirmás eliminar el registro?"
       show: "Detalle"
       actions: "Acciones"
+      deactivate: "Desactivar"
+      activate: "Activar"
+      status_active: "Activo"
+      status_inactive: "Inactivo"
+      click_to_activate: "Clic para activar"
+      click_to_deactivate: "Clic para desactivar"
+      unauthorized: "No tienes autorización para realizar esta acción."
       form_error_header: "Corrige los siguientes errores:"
+      select_placeholder: "Seleccionar una opción"
       pagination:
         showing: "Mostrando del %{from} al %{to} de %{count} resultados"
         previous: "Anterior"
@@ -167,7 +184,8 @@ es:
       update:
         success: "Mascota actualizada correctamente."
       destroy:
-        confirm_delete: "¿Confirmás eliminar a %{name}?"
+        confirm_delete: "¿Confirmás eliminar definitivamente a %{name}?"
+        confirm_deactivate: "¿Deseas desactivar esta mascota?"
         success: "Mascota eliminada del sistema."
 
       index:
@@ -175,11 +193,19 @@ es:
         header: "Listado de Mascotas"
         subtitle: "Gestión de animales registrados en el refugio"
         add_pet: "Registrar Mascota"
+        search_placeholder: "Buscar por nombre..."
+        all_statuses: "Todos los estados"
+        all_records: "Todos (Activos e Inactivos)"
+        active_only: "Solo Activos"
+        inactive_only: "Solo Inactivos"
+        filter_button: "Filtrar"
+        clear_filters: "Limpiar filtros"
         table:
           name: "Nombre"
           species_breed: "Raza / Especie"
           age: "Edad"
           status: "Estado"
+          active_switch: "Estado"
           actions: "Acciones"
           no_pets: "No hay mascotas registradas todavía."
           no_breed: "Sin raza"
@@ -271,18 +297,26 @@ es:
         header: "Listado de Refugios"
         subtitle: "Gestión de refugios registrados en el sistema"
         add_shelter: "Registrar Refugio"
+        search_placeholder: "Buscar por nombre o teléfono..."
+        all_records: "Todos (Activos e Inactivos)"
+        active_only: "Solo Activos"
+        inactive_only: "Solo Inactivos"
+        filter_button: "Filtrar"
+        clear_filters: "Limpiar filtros"
+        empty: "No se encontraron refugios."
         table:
           name: "Nombre"
           city: "Ciudad"
           address: "Dirección"
           phone: "Teléfono"
+          pets_count: "Cant. Mascotas"
+          active_switch: "Estado"
           actions: "Acciones"
           no_shelters: "No hay refugios registrados todavía."
           edit: "Editar"
           show: "Ver detalle"
           delete: "Eliminar"
           confirm_delete: "¿Estás seguro de eliminar el refugio %{name}?"
-          pets_count: "Cant. Mascotas"  
       show:
         title: "Detalle de Refugio"
         details: "Datos del Refugio"
@@ -356,16 +390,26 @@ es:
         header: "Gestión de Usuarios"
         subtitle: "Administración de accesos y encargados de refugios."
         add_manager: "Nuevo Encargado"
+        search_placeholder: "Buscar por nombre o email..."
+        all_roles: "Todos los roles"
+        all_records: "Todos (Activos e Inactivos)"
+        active_only: "Solo Activos"
+        inactive_only: "Solo Inactivos"
+        filter_button: "Filtrar"
+        clear_filters: "Limpiar filtros"
         table:
           name: "Nombre"
           email: "Email"
           role: "Rol"
           shelter: "Refugio"
+          active_switch: "Estado"
           actions: "Acciones"
           confirm_delete: "¿Estás seguro de eliminar el usuario %{name}?"
+          no_users: "No se encontraron usuarios."
       show:
         title: "Perfil de Usuario"
         header: "Datos de Usuario"
+        no_shelter: "Sin refugio asignado"
       new:
         title: "Nuevo Usuario"
         header: "Registrar Nuevo Usuario"

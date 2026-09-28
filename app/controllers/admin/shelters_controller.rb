@@ -1,4 +1,3 @@
-# app/controllers/admin/shelters_controller.rb
 module Admin
   class SheltersController < ApplicationController
     before_action :set_shelter, only: %i[show edit update destroy]
@@ -6,7 +5,12 @@ module Admin
     before_action :authorize_shelter_access!, only: %i[show edit update]
 
     def index
-      @pagy, @shelters = pagy(Shelter.includes(address: :city).order(:name), items: 10)
+      shelters = Shelter.includes(address: :city)
+                        .search_by_text(params[:query])
+                        .by_active_status(params[:active])
+                        .order(:name)
+
+      @pagy, @shelters = pagy(shelters, items: 10)
     end
 
     def show
@@ -33,7 +37,6 @@ module Admin
 
     def update
       if @shelter.update(shelter_params)
-        # Si es admin de refugio, lo mantenemos en la vista de edición o de detalle de su refugio
         target_path = current_user.admin? ? admin_shelter_path(@shelter) : edit_admin_shelter_path(@shelter)
         redirect_to target_path, notice: t(".success")
       else
@@ -59,7 +62,6 @@ module Admin
     end
 
     def authorize_shelter_access!
-      # Permitir si es Admin general O si es Admin de refugio intentando modificar su propio refugio
       return if current_user.admin?
       return if current_user.shelter_manager? && current_user.shelter_id == @shelter.id
 
@@ -67,7 +69,7 @@ module Admin
     end
 
     def shelter_params
-      params.require(:shelter).permit(
+      allowed_params = [
         :name,
         :phone,
         :website,
@@ -75,7 +77,12 @@ module Admin
         :logo,
         photos: [],
         address_attributes: %i[id street number floor apartment zip_code city_id]
-      )
+      ]
+
+      # Only super admins can toggle shelter active state
+      allowed_params << :active if current_user&.admin?
+
+      params.require(:shelter).permit(allowed_params)
     end
   end
 end
