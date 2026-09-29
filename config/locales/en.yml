@@ -435,3 +435,49 @@ en:
     submit:
       create: "Save %{model}"
       update: "Update %{model}"
+
+  # ==========================================
+  # 5. ADOPTION APPLICATIONS MAILER
+  # ==========================================
+  mailers:
+    shared:
+      footer: "PetMatch Team"
+    adoption_application:
+      submitted:
+        subject: "We received your adoption application for %{pet_name}"
+        greeting: "Hello %{name}!"
+        body: "We correctly received your adoption application for %{pet_name}."
+        current_status: "Current Status"
+        next_steps: "The shelter team will contact you shortly to evaluate the application."
+      new_notice:
+        subject: "New adoption application received for %{pet_name}"
+        title: "New Adoption Application"
+        intro: "A new adoption application has been registered for %{pet_name}."
+        applicant: "Applicant"
+        pet: "Pet"
+        call_to_action: "Log in to the administration panel to review the applicant's profile and evaluate the application."
+      status_changed:
+        subject: "Update of your adoption application for %{pet_name}"
+        greeting: "Hello %{name},"
+        body: "We inform you that the status of your adoption application for %{pet_name} has changed."
+        new_status: "New Status"
+        notes: "Shelter Notes"
+        closing: "We appreciate your commitment and interest in giving a home to our animals."
+    user:
+      welcome:
+        manager_subject: "Welcome to the PetMatch admin dashboard"
+        adopter_subject: "Welcome to PetMatch!"
+        greeting: "Hello %{name}!"
+        manager_body: "Your Shelter Manager account has been created. You can now log in to the panel to manage listings and requests."
+        adopter_body: "Thank you for registering on PetMatch. You can now browse available pets and submit your adoption applications."
+        assigned_shelter: "Assigned shelter"
+      account_reactivated:
+        subject: "Your account has been reactivated!"
+        greeting: "Hello %{name}!"
+        body: "We inform you that your PetMatch account has been reactivated by an administrator."
+        notice: "You can now log back into the platform using your usual credentials."
+      account_deactivated:
+        subject: "Notice: Your account has been deactivated"
+        greeting: "Hello %{name},"
+        body: "We inform you that your PetMatch account has been deactivated by an administrator."
+        notice: "From this moment you will not be able to access the platform. If you believe this is an error, please contact our team."

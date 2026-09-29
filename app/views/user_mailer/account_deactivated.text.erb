@@ -1,0 +1,11 @@
+<%= t("mailers.user.welcome_manager.greeting", name: @user.first_name) %>
+
+<%= t("mailers.user.welcome_manager.body") %>
+
+<% if @shelter.present? %>
+<%= t("mailers.user.welcome_manager.assigned_shelter") %>: <%= @shelter.name %>
+<% end %>
+
+<%= t("mailers.user.welcome_manager.instructions") %>
+
+<%= t("mailers.shared.footer") %>

@@ -1,0 +1,8 @@
+<%= t("mailers.adoption_application.submitted.greeting", name: @user.first_name) %>
+
+<%= t("mailers.adoption_application.submitted.body", pet_name: @pet.name) %>
+
+<%= t("mailers.adoption_application.submitted.current_status") %>: <%= t("activerecord.attributes.adoption_application/status.#{@application.status}") %>
+<%= t("mailers.adoption_application.submitted.next_steps") %>
+
+<%= t("mailers.shared.footer") %>

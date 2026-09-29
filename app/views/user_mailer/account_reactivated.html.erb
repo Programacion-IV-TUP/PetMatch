@@ -1,0 +1,13 @@
+<div style="font-family: sans-serif; color: #334155; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="color: #059669;"><%= t("mailers.user.account_reactivated.greeting", name: @user.first_name) %></h2>
+  
+  <p><%= t("mailers.user.account_reactivated.body") %></p>
+
+  <div style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 16px; margin: 20px 0; color: #065f46;">
+    <p style="margin: 0; font-size: 13px;">
+      <%= t("mailers.user.account_reactivated.notice") %>
+    </p>
+  </div>
+
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 30px;"><%= t("mailers.shared.footer") %></p>
+</div>

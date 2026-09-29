@@ -11,6 +11,9 @@ module Admin
 
     def update
       if @application.update(application_params)
+        if @application.saved_change_to_status?
+          AdoptionApplicationMailer.status_changed(@application).deliver_later
+        end
         redirect_to admin_adoption_application_path(@application), notice: t(".success")
       else
         render :show, status: :unprocessable_entity

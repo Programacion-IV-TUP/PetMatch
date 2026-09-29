@@ -437,3 +437,49 @@ es:
     submit:
       create: "Guardar %{model}"
       update: "Actualizar %{model}"
+
+  # ==========================================
+  # 5. MAILER SOLICITUDES DE ADOPCION
+  # ==========================================
+  mailers:
+    shared:
+      footer: "Equipo de PetMatch"
+    adoption_application:
+      submitted:
+        subject: "Recibimos tu solicitud de adopción para %{pet_name}"
+        greeting: "¡Hola %{name}!"
+        body: "Recibimos correctamente tu solicitud de adopción para %{pet_name}."
+        current_status: "Estado actual"
+        next_steps: "El equipo del refugio se pondrá en contacto con vos a la brevedad para evaluar la postulación."
+      new_notice:
+        subject: "Nueva solicitud de adopción recibida para %{pet_name}"
+        title: "Nueva Solicitud de Adopción"
+        intro: "Se ha registrado una nueva postulación de adopción para %{pet_name}."
+        applicant: "Solicitante"
+        pet: "Mascota"
+        call_to_action: "Ingresá al panel de administración para revisar el perfil del solicitante y evaluar la solicitud."
+      status_changed:
+        subject: "Actualización de tu solicitud de adopción para %{pet_name}"
+        greeting: "Hola %{name},"
+        body: "Te informamos que ha cambiado el estado de tu solicitud de adopción para %{pet_name}."
+        new_status: "Nuevo Estado"
+        notes: "Notas del refugio"
+        closing: "Agradecemos tu compromiso e interés en dar un hogar a nuestros animales."
+    user:
+      welcome:
+        manager_subject: "Bienvenido al panel de administración de PetMatch"
+        adopter_subject: "¡Bienvenido/a a PetMatch!"
+        greeting: "¡Hola %{name}!"
+        manager_body: "Se ha creado tu cuenta de Encargado de Refugio. Ya podés ingresar al panel para gestionar publicaciones y solicitudes."
+        adopter_body: "Gracias por registrarte en PetMatch. Ahora podés explorar las mascotas disponibles y enviar tus solicitudes de adopción."
+        assigned_shelter: "Refugio asignado"
+      account_reactivated:
+        subject: "¡Tu cuenta ha sido reactivada!"
+        greeting: "¡Hola %{name}!"
+        body: "Te informamos que tu cuenta en PetMatch ha sido reactivada por un administrador."
+        notice: "Ya podés volver a ingresar a la plataforma con tus credenciales habituales."
+      account_deactivated:
+        subject: "Aviso: Tu cuenta ha sido desactivada"
+        greeting: "Hola %{name},"
+        body: "Te informamos que tu cuenta en PetMatch ha sido desactivada por un administrador."
+        notice: "A partir de este momento no podrás acceder a la plataforma. Si creés que esto es un error, ponete en contacto con nuestro equipo."

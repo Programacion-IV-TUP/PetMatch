@@ -1,0 +1,20 @@
+<div style="font-family: sans-serif; color: #334155; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="color: #059669;"><%= t("mailers.adoption_application.status_changed.greeting", name: @user.first_name) %></h2>
+  
+  <p><%= t("mailers.adoption_application.status_changed.body", pet_name: @pet.name) %></p>
+
+  <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 20px 0;">
+    <p style="margin: 0; font-size: 14px;">
+      <strong><%= t("mailers.adoption_application.status_changed.new_status") %>:</strong> 
+      <span style="color: #0284c7;"><%= t("activerecord.attributes.adoption_application/status.#{@application.status}") %></span>
+    </p>
+    <% if @application.notes.present? %>
+      <p style="margin-top: 10px; font-size: 13px; color: #64748b;">
+        <strong><%= t("mailers.adoption_application.status_changed.notes") %>:</strong> <%= @application.notes %>
+      </p>
+    <% end %>
+  </div>
+
+  <p><%= t("mailers.adoption_application.status_changed.closing") %></p>
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 30px;"><%= t("mailers.shared.footer") %></p>
+</div>

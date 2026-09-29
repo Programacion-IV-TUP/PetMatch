@@ -27,6 +27,7 @@ module Admin
       @user.role = :shelter_manager unless current_user.admin? && params[:user][:role].present?
 
       if @user.save
+        UserMailer.welcome(@user).deliver_later
         redirect_to admin_users_path, notice: t(".success")
       else
         @user.build_address unless @user.address
@@ -45,6 +46,14 @@ module Admin
       end
 
       if @user.update(user_params)
+        if @user.saved_change_to_active?
+          if @user.active?
+            UserMailer.account_reactivated(@user).deliver_later
+          else
+            UserMailer.account_deactivated(@user).deliver_later
+          end
+        end
+
         target_path = current_user.admin? ? admin_users_path : edit_admin_user_path(@user)
         redirect_to target_path, notice: t(".success")
       else

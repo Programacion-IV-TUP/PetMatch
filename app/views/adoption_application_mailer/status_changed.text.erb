@@ -1,0 +1,12 @@
+<%= t("mailers.adoption_application.status_changed.greeting", name: @user.first_name) %>
+
+<%= t("mailers.adoption_application.status_changed.body", pet_name: @pet.name) %>
+
+<%= t("mailers.adoption_application.status_changed.new_status") %>: <%= t("activerecord.attributes.adoption_application/status.#{@application.status}") %>
+<% if @application.notes.present? %>
+<%= t("mailers.adoption_application.status_changed.notes") %>: <%= @application.notes %>
+<% end %>
+
+<%= t("mailers.adoption_application.status_changed.closing") %>
+
+<%= t("mailers.shared.footer") %>

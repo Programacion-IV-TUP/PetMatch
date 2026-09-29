@@ -1,0 +1,18 @@
+<div style="font-family: sans-serif; color: #334155; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="color: #059669;"><%= t("mailers.user.welcome.greeting", name: @user.first_name) %></h2>
+  
+  <% if @user.shelter_manager? %>
+    <p><%= t("mailers.user.welcome.manager_body") %></p>
+    <% if @shelter.present? %>
+      <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 20px 0;">
+        <p style="margin: 0; font-size: 14px;">
+          <strong><%= t("mailers.user.welcome.assigned_shelter") %>:</strong> <%= @shelter.name %>
+        </p>
+      </div>
+    <% end %>
+  <% else %>
+    <p><%= t("mailers.user.welcome.adopter_body") %></p>
+  <% end %>
+
+  <p style="font-size: 12px; color: #94a3b8; margin-top: 30px;"><%= t("mailers.shared.footer") %></p>
+</div>

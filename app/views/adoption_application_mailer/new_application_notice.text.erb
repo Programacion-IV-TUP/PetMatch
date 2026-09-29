@@ -1,0 +1,10 @@
+<%= t("mailers.adoption_application.new_notice.title") %>
+
+<%= t("mailers.adoption_application.new_notice.intro", pet_name: @pet.name) %>
+
+<%= t("mailers.adoption_application.new_notice.applicant") %>: <%= @user.full_name %> (<%= @user.email_address %>)
+<%= t("mailers.adoption_application.new_notice.pet") %>: <%= @pet.name %>
+
+<%= t("mailers.adoption_application.new_notice.call_to_action") %>
+
+<%= t("mailers.shared.footer") %>
