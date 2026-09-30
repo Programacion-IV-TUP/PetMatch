@@ -42,7 +42,7 @@ module Api
 
         if application.save
           AdoptionApplicationMailer.application_submitted(application, locale: I18n.locale).deliver_later if defined?(AdoptionApplicationMailer)
-AdoptionApplicationMailer.new_application_notice(application, locale: I18n.locale).deliver_later if defined?(AdoptionApplicationMailer)
+          AdoptionApplicationMailer.new_application_notice(application, locale: I18n.locale).deliver_later if defined?(AdoptionApplicationMailer)
 
           render json: {
             status: 201,

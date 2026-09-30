@@ -18,6 +18,9 @@ gem "pagy", "~> 8.4"
 # Json Web Token
 gem "jwt"
 
+# Rack CORS
+gem "rack-cors"
+
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
