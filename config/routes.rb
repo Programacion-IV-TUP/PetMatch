@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       patch "profile", to: "users#update"
       delete "profile", to: "users#destroy"
 
+      get "enums", to: "enums#index"
+
       resources :pets, only: %i[index show]
       resources :shelters, only: %i[index show]
       resources :adoption_applications, only: %i[index create update destroy]
