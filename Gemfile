@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 
 # JSON
-gem "json", "~> 2.8"
+gem "json", "~> 3.0"
 
 # TailwindCSS
 gem "tailwindcss-rails"
