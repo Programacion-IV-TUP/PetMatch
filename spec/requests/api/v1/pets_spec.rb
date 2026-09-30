@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Pets", type: :request do
   let!(:city) { City.create!(name: "La Plata", state: "Buenos Aires") }
   let!(:address) { Address.create!(street: "Calle 7", number: "850", city: city) }
-  let!(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", address: address) }
-  
+  let!(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", phone: "+542214445566", address: address) }
+
   let!(:dog_breed) { Breed.create!(name: "Labrador", species: :dog) }
   let!(:cat_breed) { Breed.create!(name: "Siamés", species: :cat) }
 

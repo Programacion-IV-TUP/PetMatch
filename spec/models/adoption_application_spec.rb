@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AdoptionApplication, type: :model do
   let!(:city) { City.create!(name: "La Plata", state: "Buenos Aires") }
   let!(:address) { Address.create!(street: "Calle 7", number: "850", city: city) }
-  let!(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", address: address) }
+  let!(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", phone: "+542214445566", address: address) }
   let!(:breed) { Breed.create!(name: "Mestizo", species: :dog) }
   let!(:pet) { Pet.create!(name: "Firulais", age_months: 12, gender: :male, size: :medium, status: :available, breed: breed, shelter: shelter) }
 
@@ -21,7 +21,7 @@ RSpec.describe AdoptionApplication, type: :model do
         }.to change { pet.reload.status }.from("available").to("adopted")
 
         expect(app_b.reload.status).to eq("rejected")
-        expect(app_b.notes).to include("Rechazada automáticamente")
+        expect(app_b.notes).to include(I18n.t("admin.adoption_applications.auto_notes.rejected_by_adoption"))
       end
     end
 
