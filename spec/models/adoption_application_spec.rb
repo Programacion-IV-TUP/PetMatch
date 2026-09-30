@@ -11,8 +11,8 @@ RSpec.describe AdoptionApplication, type: :model do
   let!(:adopter_b) { User.create!(first_name: "Maria", last_name: "Gómez", email_address: "maria@test.com", password: "password123", address: address) }
 
   describe "callbacks y reglas de negocio" do
-    let!(:app_a) { AdoptionApplication.create!(pet: pet, user: adopter_a, housing_type: "house", has_another_pet: false) }
-    let!(:app_b) { AdoptionApplication.create!(pet: pet, user: adopter_b, housing_type: "apartment", has_another_pet: true) }
+    let!(:app_a) { described_class.create!(pet: pet, user: adopter_a, housing_type: "house", has_another_pet: false) }
+    let!(:app_b) { described_class.create!(pet: pet, user: adopter_b, housing_type: "apartment", has_another_pet: true) }
 
     context "cuando se aprueba una solicitud de adopción" do
       it "cambia el estado de la mascota a 'adopted' y rechaza las solicitudes competidoras" do

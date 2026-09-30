@@ -1,6 +1,5 @@
 # Preview all emails at http://localhost:3000/rails/mailers/adoption_application_mailer
 class AdoptionApplicationMailerPreview < ActionMailer::Preview
-
   # Preview this email at http://localhost:3000/rails/mailers/adoption_application_mailer/application_submitted
   def application_submitted
     AdoptionApplicationMailer.application_submitted
@@ -15,5 +14,4 @@ class AdoptionApplicationMailerPreview < ActionMailer::Preview
   def status_changed
     AdoptionApplicationMailer.status_changed
   end
-
 end

@@ -1,8 +1,41 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+plugins:
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.1
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/**/*'
+    - 'bin/**/*'
+    - 'config/initializers/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'public/**/*'
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+
+# Allows multiple expectations in API and model tests
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# Allows let/let! as needed for setup in tests
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+# Allows more descriptive test blocks in integration tests
+RSpec/ExampleLength:
+  Max: 15
+
+# Allows flexible naming in Spanish context descriptions
+RSpec/ContextWording:
+  Enabled: false

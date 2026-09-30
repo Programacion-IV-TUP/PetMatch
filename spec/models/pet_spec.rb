@@ -8,7 +8,7 @@ RSpec.describe Pet, type: :model do
     let!(:breed) { Breed.create!(name: 'Mestizo', species: :dog) }
 
     it "nombre debe estar presente" do
-      pet = Pet.new(
+      pet = described_class.new(
         name: nil,
         breed: breed,
         shelter: shelter
@@ -19,7 +19,7 @@ RSpec.describe Pet, type: :model do
     end
 
     it "es válido con todos los atributos requeridos" do
-      pet = Pet.new(
+      pet = described_class.new(
         name: 'Milo',
         age_months: 12,
         gender: :male,
