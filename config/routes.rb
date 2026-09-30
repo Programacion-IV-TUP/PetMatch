@@ -5,14 +5,21 @@ Rails.application.routes.draw do
   resources :locales, only: :update
   namespace :api do
     namespace :v1 do
-      get "sessions/create"
-      get "sessions/destroy"
-      get "adoption_applications/create"
-      get "adoption_applications/index"
-      get "pets/index"
-      get "pets/show"
+      post "login", to: "sessions#create"
+      post "signup", to: "users#create"
+      delete "logout", to: "sessions#destroy"
+
+      get "profile", to: "users#show"
+
+      resources :pets, only: %i[index show]
+      resources :shelters, only: %i[index show]
+      resources :adoption_applications, only: %i[index create]
+      resources :favorites, only: %i[index create destroy]
+      resources :breeds, only: :index
+      resources :cities, only: :index
     end
   end
+
 namespace :admin do
   root to: "pets#index"
 

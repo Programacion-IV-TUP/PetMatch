@@ -1,6 +1,5 @@
 module Admin
   class ApplicationController < ::ApplicationController
-    # require_authentication ya viene heredado desde ApplicationController
     before_action :require_admin_access
     layout "admin"
 
@@ -11,7 +10,6 @@ module Admin
     end
 
     def require_admin_access
-      # Evaluamos con Current.session&.user o el helper interno
       user = current_user
       unless user && (user.role == "admin" || user.role == "shelter_manager")
         redirect_to root_path, alert: "No tenés permisos para acceder al área administrativa."

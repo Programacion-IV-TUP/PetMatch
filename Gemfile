@@ -3,14 +3,20 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 
+# JSON
 gem "json", "~> 2.8"
 
+# TailwindCSS
 gem "tailwindcss-rails"
 
+# Active Storage Validations
 gem "active_storage_validations"
 
 # Pagination
 gem "pagy", "~> 8.4"
+
+# Json Web Token
+gem "jwt"
 
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
