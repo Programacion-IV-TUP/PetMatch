@@ -14,6 +14,17 @@ class Pet < ApplicationRecord
     adopted: "adopted"
   }, default: "available"
 
+  enum :size, {
+    small: "small",
+    medium: "medium",
+    large: "large"
+  }, default: "medium"
+
+  enum :gender, {
+    male: "male",
+    female: "female"
+  }, default: "male"
+
   validates :name, presence: true
   validates :gender, presence: true
   validates :age_months, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

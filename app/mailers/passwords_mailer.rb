@@ -1,6 +1,12 @@
 class PasswordsMailer < ApplicationMailer
-  def reset(user)
+  def reset(user, locale: I18n.locale)
     @user = user
-    mail subject: "Reset your password", to: user.email_address
+
+    with_locale(locale) do
+      mail(
+        to: @user.email_address,
+        subject: t("mailers.passwords.reset.subject")
+      )
+    end
   end
 end

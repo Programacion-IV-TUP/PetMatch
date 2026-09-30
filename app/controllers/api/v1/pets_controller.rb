@@ -11,6 +11,7 @@ module Api
 
         pets = pets.joins(:breed).where(breeds: { species: params[:species] }) if params[:species].present?
         pets = pets.where(breed_id: params[:breed_id]) if params[:breed_id].present?
+        pets = pets.where(gender: params[:gender]) if params[:gender].present? # <--- Filtro agregado
         pets = pets.where(size: params[:size]) if params[:size].present?
         pets = pets.where(shelter_id: params[:shelter_id]) if params[:shelter_id].present?
         pets = pets.joins(shelter: :address).where(addresses: { city_id: params[:city_id] }) if params[:city_id].present?

@@ -110,6 +110,15 @@ en:
         cat: "Cat"
         other: "Other"
 
+      pet/gender:
+        male: "Male"
+        female: "Female"
+
+      pet/size:
+        small: "Small"
+        medium: "Medium"
+        large: "Large"
+
       pet/status:
         available: "Available"
         in_process: "In Process"
@@ -427,8 +436,13 @@ en:
         success: "User deleted successfully."
 
   # ==========================================
-  # 4. GENERIC HELPERS
+  # 4. GENERIC FORM HELPERS
   # ==========================================
+  address:
+    floor: "Floor"
+    apartment: "Apt"
+    zip_code: "Zip"
+
   helpers:
     select:
       prompt: "Select an option..."
@@ -437,11 +451,17 @@ en:
       update: "Update %{model}"
 
   # ==========================================
-  # 5. ADOPTION APPLICATIONS MAILER
+  # 5. MAILERS
   # ==========================================
   mailers:
     shared:
       footer: "PetMatch Team"
+    passwords:
+      reset:
+        subject: "Password Reset"
+        greeting: "Hello %{name}!"
+        body: "We received a request to reset your password."
+        link_text: "Reset Password"
     adoption_application:
       submitted:
         subject: "We received your adoption application for %{pet_name}"

@@ -110,6 +110,15 @@ es:
         cat: "Gato"
         other: "Otro"
 
+      pet/gender:
+        male: "Macho"
+        female: "Hembra"
+
+      pet/size:
+        small: "Pequeño"
+        medium: "Mediano"
+        large: "Grande"
+
       pet/status:
         available: "Disponible"
         in_process: "En proceso"
@@ -429,8 +438,13 @@ es:
         success: "Usuario eliminado correctamente."
 
   # ==========================================
-  # 4. HELPERS GENÉRICOS
+  # 4. HELPERS GENÉRICOS DE FORMULARIO
   # ==========================================
+  address:
+    floor: "Piso"
+    apartment: "Depto"
+    zip_code: "CP"
+
   helpers:
     select:
       prompt: "Seleccionar una opción..."
@@ -439,11 +453,17 @@ es:
       update: "Actualizar %{model}"
 
   # ==========================================
-  # 5. MAILER SOLICITUDES DE ADOPCION
+  # 5. MAILERS
   # ==========================================
   mailers:
     shared:
       footer: "Equipo de PetMatch"
+    passwords:
+      reset:
+        subject: "Restablecimiento de contraseña"
+        greeting: "¡Hola %{name}!"
+        body: "Recibimos una solicitud para restablecer tu contraseña."
+        link_text: "Restablecer contraseña"
     adoption_application:
       submitted:
         subject: "Recibimos tu solicitud de adopción para %{pet_name}"

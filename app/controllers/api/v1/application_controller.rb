@@ -6,11 +6,17 @@ module Api
       rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
       rescue_from StandardError, with: :render_internal_server_error
 
+      before_action :set_locale
       before_action :authenticate_user!
 
       attr_reader :current_user
 
       private
+
+      def set_locale
+        header_locale = request.headers["Accept-Language"]&.scan(/^[a-z]{2}/)&.first
+        I18n.locale = I18n.available_locales.map(&:to_s).include?(header_locale) ? header_locale : I18n.default_locale
+      end
 
       def authenticate_user!
         authenticate_token || render_unauthorized

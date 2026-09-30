@@ -41,8 +41,8 @@ module Api
         )
 
         if application.save
-          AdoptionApplicationMailer.application_submitted(application).deliver_later if defined?(AdoptionApplicationMailer)
-          AdoptionApplicationMailer.new_application_notice(application).deliver_later if defined?(AdoptionApplicationMailer)
+          AdoptionApplicationMailer.application_submitted(application, locale: I18n.locale).deliver_later if defined?(AdoptionApplicationMailer)
+AdoptionApplicationMailer.new_application_notice(application, locale: I18n.locale).deliver_later if defined?(AdoptionApplicationMailer)
 
           render json: {
             status: 201,
@@ -55,6 +55,42 @@ module Api
             errors: application.errors.as_json
           }, status: :unprocessable_entity
         end
+      end
+
+      # PUT/PATCH /api/v1/adoption_applications/:id
+      def update
+        application = current_user.adoption_applications.find_by(id: params[:id])
+        return render json: { status: 404, code: "NOT_FOUND" }, status: :not_found unless application
+
+        unless application.pending?
+          return render json: { status: 422, code: "APPLICATION_NOT_EDITABLE" }, status: :unprocessable_entity
+        end
+
+        app_params = params[:adoption_application] || params
+
+        if application.update(
+          housing_type: app_params[:housing_type] || application.housing_type,
+          has_another_pet: app_params.key?(:has_another_pet) ? app_params[:has_another_pet] : application.has_another_pet,
+          notes: app_params[:notes] || application.notes
+        )
+          render json: { status: 200, data: application_payload(application) }, status: :ok
+        else
+          render json: { status: 422, code: "VALIDATION_ERROR", errors: application.errors.as_json }, status: :unprocessable_entity
+        end
+      end
+
+      # DELETE /api/v1/adoption_applications/:id (Cancel application)
+      def destroy
+        application = current_user.adoption_applications.find_by(id: params[:id])
+        return render json: { status: 404, code: "NOT_FOUND" }, status: :not_found unless application
+
+        if application.cancelled? || application.approved?
+          return render json: { status: 422, code: "CANNOT_CANCEL_APPLICATION" }, status: :unprocessable_entity
+        end
+
+        application.update!(status: :cancelled)
+
+        render json: { status: 200, code: "APPLICATION_CANCELLED" }, status: :ok
       end
 
       private

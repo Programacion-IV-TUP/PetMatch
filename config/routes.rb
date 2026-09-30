@@ -10,10 +10,13 @@ Rails.application.routes.draw do
       delete "logout", to: "sessions#destroy"
 
       get "profile", to: "users#show"
+      put "profile", to: "users#update"
+      patch "profile", to: "users#update"
+      delete "profile", to: "users#destroy"
 
       resources :pets, only: %i[index show]
       resources :shelters, only: %i[index show]
-      resources :adoption_applications, only: %i[index create]
+      resources :adoption_applications, only: %i[index create update destroy]
       resources :favorites, only: %i[index create destroy]
       resources :breeds, only: :index
       resources :cities, only: :index
