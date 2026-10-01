@@ -7,9 +7,15 @@ es:
     has_dependencies: "No se puede eliminar el registro porque tiene datos asociados."
 
   sessions:
+    title: "Iniciar Sesión"
+    header: "Panel de Administración - PetMatch"
+    subtitle: "Ingresá con tus credenciales para acceder al sistema."
+    email: "Correo Electrónico"
+    password: "Contraseña"
+    sign_in: "Iniciar Sesión"
     account_inactive: "Tu cuenta se encuentra inactiva. Comunícate con un administrador."
     account_deactivated: "Tu sesión ha sido finalizada o tu cuenta se encuentra inactiva."
-    invalid_credentials: "Email o contraseña incorrectos."
+    invalid_credentials: "Correo electrónico o contraseña incorrectos."
 
   # ==========================================
   # 2. MODELOS, ATRIBUTOS Y ENUMS (DOMINIO / API / VISTAS)

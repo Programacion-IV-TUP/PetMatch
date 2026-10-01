@@ -7,6 +7,12 @@ en:
     has_dependencies: "Cannot delete record because it has associated data."
 
   sessions:
+    title: "Login"
+    header: "Administration Panel - PetMatch"
+    subtitle: "Enter your credentials to access the system."
+    email: "Email"
+    password: "Password"
+    sign_in: "Login"
     account_inactive: "Your account is inactive. Please contact an administrator."
     account_deactivated: "Your session has expired or your account is inactive."
     invalid_credentials: "Incorrect email or password."
