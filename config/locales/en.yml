@@ -193,6 +193,7 @@ en:
         next: "Next"
         page_info: "Page %{page} of %{pages}"
       choose_file: "Choose file"
+      choose_files: "Choose files"
       no_file_chosen: "No file selected"
 
     pets:

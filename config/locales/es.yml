@@ -194,6 +194,7 @@ es:
         next: "Siguiente"
         page_info: "Página %{page} de %{pages}"
       choose_file: "Seleccionar archivo"
+      choose_files: "Seleccionar archivos"
       no_file_chosen: "Ningún archivo seleccionado"
 
     pets:
