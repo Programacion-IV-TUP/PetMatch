@@ -11,92 +11,125 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-full font-sans antialiased text-slate-700 overflow-hidden">
-    <!-- Main layout container with fixed screen height -->
-    <div class="h-screen flex flex-col md:flex-row overflow-hidden">
+  <body class="h-full font-sans antialiased text-slate-700 bg-slate-50" data-controller="sidebar">
+    <!-- Contenedor principal: fijo al alto de la pantalla (h-screen / md:overflow-hidden) -->
+    <div class="min-h-screen md:h-screen flex flex-col md:flex-row md:overflow-hidden">
       
-      <!-- Fixed Sidebar -->
-      <aside class="w-full md:w-64 bg-slate-800 text-slate-200 flex-shrink-0 flex flex-col h-full justify-between">
-        <div>
-          <!-- Logo Header -->
-          <div class="p-6 flex items-center gap-3 border-b border-slate-700/60">
-            <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-              🐾
-            </div>
-            <div>
-              <h1 class="font-bold text-slate-100 text-base leading-none">PetMatch</h1>
-              <span class="text-xs text-slate-400 font-medium"><%= t('admin.shared.back_office') %></span>
-            </div>
+      <!-- HEADER MÓVIL (< md) -->
+      <header class="md:hidden bg-slate-900 text-white p-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
+        <div class="flex items-center gap-2.5">
+          <button data-action="click->sidebar#toggle" class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white focus:outline-none cursor-pointer">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🐾</span>
+            <span class="font-bold text-base tracking-tight">PetMatch</span>
           </div>
+        </div>
 
-          <!-- Navigation Links -->
-          <nav class="px-4 py-6 space-y-1">
-            <%= link_to admin_pets_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_pets_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-              <span>🐶</span> <%= t('admin.shared.pets') %>
-            <% end %>
+        <div class="flex items-center gap-1 bg-slate-800 p-1 rounded-lg text-[11px] font-bold">
+          <%= link_to "ES", url_for(locale: :es), class: "px-1.5 py-0.5 rounded #{I18n.locale == :es ? 'bg-emerald-600 text-white' : 'text-slate-400'}" %>
+          <%= link_to "EN", url_for(locale: :en), class: "px-1.5 py-0.5 rounded #{I18n.locale == :en ? 'bg-emerald-600 text-white' : 'text-slate-400'}" %>
+        </div>
+      </header>
 
-            <%= link_to admin_adoption_applications_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_adoption_applications_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-              <span>📋</span> <%= t('admin.shared.applications') %>
-            <% end %>
+      <!-- BACKDROP MÓVIL -->
+      <div data-sidebar-target="backdrop" 
+           data-action="click->sidebar#close" 
+           class="hidden fixed inset-0 bg-slate-900/60 z-40 backdrop-blur-xs md:hidden transition-opacity"></div>
 
-            <% if current_user.admin? %>
-              <%= link_to admin_shelters_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_shelters_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-                <span>🏠</span> <%= t('admin.shared.shelters') %>
+      <!-- SIDEBAR: Fija al 100% de la altura visible en escritorio (md:h-screen md:sticky md:top-0) -->
+      <aside data-sidebar-target="menu" 
+             class="fixed md:sticky top-0 left-0 z-50 w-72 md:w-64 md:h-screen bg-slate-900 text-slate-200 flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out shadow-xl md:shadow-none flex-shrink-0">
+        
+        <div class="flex flex-col h-full justify-between">
+          <div>
+            <!-- Header Sidebar -->
+            <div class="p-5 flex items-center justify-between border-b border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold text-lg">
+                  🐾
+                </div>
+                <div>
+                  <h1 class="font-bold text-slate-100 text-base leading-none">PetMatch</h1>
+                  <span class="text-xs text-slate-400 font-medium"><%= t('admin.shared.back_office') %></span>
+                </div>
+              </div>
+              <button data-action="click->sidebar#close" class="md:hidden text-slate-400 hover:text-white p-1">
+                ✕
+              </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-4 space-y-1.5 overflow-y-auto">
+              <%= link_to admin_pets_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_pets_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                <span class="text-base">🐶</span> <%= t('admin.shared.pets') %>
               <% end %>
 
-              <%= link_to admin_users_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_users_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-                <span>👥</span> <%= t('admin.shared.users') %>
+              <%= link_to admin_adoption_applications_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_adoption_applications_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                <span class="text-base">📋</span> <%= t('admin.shared.applications') %>
               <% end %>
-            <% elsif current_user.shelter_manager? %>
-              <% if current_user.shelter.present? %>
-                <% shelter_edit_path = edit_admin_shelter_path(current_user.shelter) %>
-                <%= link_to shelter_edit_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(shelter_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-                  <span>🏠</span> <%= t('admin.shared.my_shelter') %>
+
+              <% if current_user.admin? %>
+                <%= link_to admin_shelters_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_shelters_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                  <span class="text-base">🏠</span> <%= t('admin.shared.shelters') %>
+                <% end %>
+
+                <%= link_to admin_users_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_users_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                  <span class="text-base">👥</span> <%= t('admin.shared.users') %>
+                <% end %>
+              <% elsif current_user.shelter_manager? %>
+                <% if current_user.shelter.present? %>
+                  <% shelter_edit_path = edit_admin_shelter_path(current_user.shelter) %>
+                  <%= link_to shelter_edit_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(shelter_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                    <span class="text-base">🏠</span> <%= t('admin.shared.my_shelter') %>
+                  <% end %>
+                <% end %>
+
+                <% profile_edit_path = edit_admin_user_path(current_user) %>
+                <%= link_to profile_edit_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(profile_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                  <span class="text-base">👤</span> <%= t('admin.shared.profile') %>
                 <% end %>
               <% end %>
 
-              <% profile_edit_path = edit_admin_user_path(current_user) %>
-              <%= link_to profile_edit_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(profile_edit_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-                <span>👤</span> <%= t('admin.shared.profile') %>
+              <%= link_to admin_breeds_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_breeds_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                <span class="text-base">🏷️</span> <%= t('admin.shared.breeds') %>
               <% end %>
-            <% end %>
 
-            <%= link_to admin_breeds_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_breeds_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-              <span>🏷️</span> <%= t('admin.shared.breeds') %>
-            <% end %>
-
-            <%= link_to admin_cities_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_cities_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'}" do %>
-              <span>📍</span> <%= t('admin.shared.cities') %>
-            <% end %>
-          </nav>
-        </div>
-
-        <!-- User Footer -->
-        <div class="p-4 border-t border-slate-700/60 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-emerald-800 text-emerald-200 flex items-center justify-center font-bold text-xs">
-              <%= current_user&.first_name&.first || "A" %>
-            </div>
-            <div class="text-xs">
-              <p class="font-semibold text-slate-200"><%= current_user&.first_name || "Admin" %></p>
-              <p class="text-slate-400 capitalize"><%= current_user&.shelter&.name || "Admin" %></p>
-            </div>
+              <%= link_to admin_cities_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition #{current_page?(admin_cities_path) ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}" do %>
+                <span class="text-base">📍</span> <%= t('admin.shared.cities') %>
+              <% end %>
+            </nav>
           </div>
-          <%= button_to session_path, method: :delete, class: "text-slate-400 hover:text-rose-400 text-xs font-medium cursor-pointer" do %>
-            <%= t('admin.shared.logout') %>
-          <% end %>
+
+          <!-- User Footer -->
+          <div class="p-4 border-t border-slate-800 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+                <%= current_user&.first_name&.first || "A" %>
+              </div>
+              <div class="text-xs truncate">
+                <p class="font-semibold text-slate-200 truncate"><%= current_user&.first_name %></p>
+                <p class="text-slate-400 capitalize truncate"><%= current_user&.shelter&.name || current_user&.role %></p>
+              </div>
+            </div>
+            <%= button_to session_path, method: :delete, class: "text-slate-400 hover:text-rose-400 text-xs font-semibold cursor-pointer p-1" do %>
+              <%= t('admin.shared.logout') %>
+            <% end %>
+          </div>
         </div>
       </aside>
 
-      <!-- Main Content Container with Independent Scroll -->
-      <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <!-- Topbar -->
-        <header class="bg-white border-b border-slate-200/80 px-6 py-4 flex items-center justify-between shadow-sm flex-shrink-0">
+      <!-- CONTENIDO PRINCIPAL: Administra el scroll de la derecha (md:overflow-y-auto) -->
+      <main class="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto bg-slate-50">
+        <!-- Topbar Escritorio -->
+        <header class="hidden md:flex bg-white border-b border-slate-200/80 px-8 py-4 items-center justify-between shadow-2xs sticky top-0 z-20">
           <h2 class="text-lg font-bold text-slate-800">
             <%= yield :page_title %>
           </h2>
-          <div class="flex items-center gap-3">
-            <!-- Locale Switcher -->
+          <div class="flex items-center gap-4">
             <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
               <%= link_to "ES", url_for(locale: :es), class: "px-2 py-1 rounded-lg transition #{I18n.locale == :es ? 'bg-white text-slate-800 shadow-xs' : 'text-slate-500 hover:text-slate-800'}" %>
               <%= link_to "EN", url_for(locale: :en), class: "px-2 py-1 rounded-lg transition #{I18n.locale == :en ? 'bg-white text-slate-800 shadow-xs' : 'text-slate-500 hover:text-slate-800'}" %>
@@ -109,10 +142,9 @@
           </div>
         </header>
 
-        <!-- Scrollable Body Content -->
-        <div class="p-6 md:p-8 flex-1 overflow-y-auto">
+        <!-- Body con scroll interno -->
+        <div class="p-4 sm:p-6 md:p-8 flex-1">
           <%= render "admin/shared/flash" %>
-
           <%= yield %>
         </div>
       </main>

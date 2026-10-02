@@ -192,6 +192,8 @@ en:
         previous: "Previous"
         next: "Next"
         page_info: "Page %{page} of %{pages}"
+      choose_file: "Choose file"
+      no_file_chosen: "No file selected"
 
     pets:
       create:

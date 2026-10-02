@@ -46,111 +46,183 @@
     <% end %>
   </div>
 
-  <!-- Pets Table -->
-  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left text-sm text-slate-600">
-        <thead class="bg-slate-50 text-xs font-semibold text-slate-400 uppercase border-b border-slate-100">
-          <tr>
-            <th class="px-6 py-3.5"><%= t('.table.name') %></th>
-            <th class="px-6 py-3.5"><%= t('.table.species_breed') %></th>
-            <th class="px-6 py-3.5"><%= t('.table.age') %></th>
-            <th class="px-6 py-3.5"><%= t('.table.status') %></th>
-            <th class="px-6 py-3.5"><%= t('.table.active_switch', default: 'Activo') %></th>
-            <th class="px-6 py-3.5 text-right"><%= t('admin.shared.actions') %></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100">
-          <% if @pets.any? %>
-            <% @pets.each do |pet| %>
-              <tr class="hover:bg-slate-50/50 transition">
-                <td class="px-6 py-4 font-semibold text-slate-900">
-                  <%= link_to admin_pet_path(pet), class: "flex items-center gap-3 hover:text-emerald-600 transition group" do %>
-                    <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base group-hover:bg-emerald-50 transition">
-                      <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+  <!-- Hotwire Turbo Frame for partial list updates -->
+  <%= turbo_frame_tag "pets_list" do %>
+    <% if @pets.any? %>
+      <!-- MOBILE VIEW: Compact cards (visible on < md screens) -->
+      <div class="grid grid-cols-1 gap-4 md:hidden">
+        <% @pets.each do |pet| %>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+            <!-- Card Header: Name, icon, breed, and status badge -->
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-lg flex-shrink-0">
+                  <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm"><%= pet.name %></h4>
+                  <p class="text-xs text-slate-500"><%= pet.breed&.name || t('.table.no_breed') %></p>
+                  <p class="text-[11px] text-slate-400"><%= pet.formatted_age %></p>
+                </div>
+              </div>
+
+              <% badge_class = case pet.status
+                 when 'available' then 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                 when 'in_process' then 'bg-amber-50 text-amber-700 border-amber-200'
+                 when 'adopted' then 'bg-slate-100 text-slate-600 border-slate-200'
+                 else 'bg-slate-50 text-slate-600 border-slate-200'
+                 end %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border <%= badge_class %> flex-shrink-0">
+                <%= t("activerecord.attributes.pet/status.#{pet.status}", default: pet.status.humanize) %>
+              </span>
+            </div>
+
+            <!-- Card Footer: Active switch and action buttons -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+              <!-- Mobile active switch -->
+              <div>
+                <% if pet.active? %>
+                  <%= button_to admin_pet_path(pet, pet: { active: false }), 
+                                method: :patch, 
+                                title: t('admin.shared.click_to_deactivate'),
+                                class: "flex items-center gap-1.5 cursor-pointer focus:outline-none" do %>
+                    <div class="w-7 h-4 bg-emerald-500 rounded-full relative p-0.5">
+                      <div class="w-3 h-3 bg-white rounded-full shadow-xs transform translate-x-3 transition-transform"></div>
                     </div>
-                    <span><%= pet.name %></span>
+                    <span class="text-[11px] font-semibold text-emerald-700"><%= t('admin.shared.status_active') %></span>
                   <% end %>
-                </td>
-                
-                <!-- Breed / Species -->
-                <td class="px-6 py-4">
-                  <span class="font-semibold text-slate-800 block"><%= pet.breed&.name || t('.table.no_breed') %></span>
-                  <span class="text-slate-400 text-xs capitalize">
-                    <%= pet.breed&.species.present? ? t("activerecord.attributes.breed/species.#{pet.breed.species.downcase}", default: pet.breed.species) : "N/A" %>
-                  </span>
-                </td>
-
-                <!-- Age -->
-                <td class="px-6 py-4 text-slate-600">
-                  <%= pet.formatted_age %>
-                </td>
-
-                <!-- Adoption Status Badge -->
-                <td class="px-6 py-4">
-                  <% badge_class = case pet.status
-                     when 'available' then 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                     when 'in_process' then 'bg-amber-50 text-amber-700 border-amber-200'
-                     when 'adopted' then 'bg-slate-100 text-slate-600 border-slate-200'
-                     else 'bg-slate-50 text-slate-600 border-slate-200'
-                     end %>
-                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border <%= badge_class %>">
-                    <%= t("activerecord.attributes.pet/status.#{pet.status}", default: pet.status.humanize) %>
-                  </span>
-                </td>
-
-                <!-- Interactive Active Toggle Switch -->
-                <td class="px-6 py-4">
-                  <% if pet.active? %>
-                    <%= button_to admin_pet_path(pet, pet: { active: false }), 
-                                  method: :patch, 
-                                  title: t('admin.shared.click_to_deactivate'),
-                                  class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
-                      <!-- Switch Track (ON) -->
-                      <div class="w-9 h-5 bg-emerald-500 rounded-full transition-colors relative p-0.5 group-hover:bg-emerald-600 shadow-inner">
-                        <!-- Switch Thumb -->
-                        <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-4 transition-transform"></div>
-                      </div>
-                      <span class="text-xs font-semibold text-emerald-700 select-none">
-                        <%= t('admin.shared.status_active') %>
-                      </span>
-                    <% end %>
-                  <% else %>
-                    <%= button_to admin_pet_path(pet, pet: { active: true }), 
-                                  method: :patch, 
-                                  title: t('admin.shared.click_to_activate'),
-                                  class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
-                      <!-- Switch Track (OFF) -->
-                      <div class="w-9 h-5 bg-slate-300 rounded-full transition-colors relative p-0.5 group-hover:bg-slate-400 shadow-inner">
-                        <!-- Switch Thumb -->
-                        <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-0 transition-transform"></div>
-                      </div>
-                      <span class="text-xs font-semibold text-slate-500 select-none">
-                        <%= t('admin.shared.status_inactive') %>
-                      </span>
-                    <% end %>
+                <% else %>
+                  <%= button_to admin_pet_path(pet, pet: { active: true }), 
+                                method: :patch, 
+                                title: t('admin.shared.click_to_activate'),
+                                class: "flex items-center gap-1.5 cursor-pointer focus:outline-none" do %>
+                    <div class="w-7 h-4 bg-slate-300 rounded-full relative p-0.5">
+                      <div class="w-3 h-3 bg-white rounded-full shadow-xs transform translate-x-0 transition-transform"></div>
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-500"><%= t('admin.shared.status_inactive') %></span>
                   <% end %>
-                </td>
+                <% end %>
+              </div>
 
-                <!-- Actions Column -->
-                <td class="px-6 py-4 text-right space-x-2">
-                  <%= link_to t('admin.shared.show'), admin_pet_path(pet), class: "text-xs font-semibold text-slate-600 hover:text-slate-900 transition" %>
-                  <%= link_to t('admin.shared.edit'), edit_admin_pet_path(pet), class: "text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
-                  <%= button_to t('admin.shared.delete'), admin_pet_path(pet), method: :delete, data: { turbo_confirm: t('admin.pets.destroy.confirm_delete', name: pet.name) }, class: "inline-block text-xs font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
-                </td>
+              <!-- Action buttons with icons -->
+              <div class="flex items-center gap-2">
+                <%= link_to admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition", title: t('admin.shared.show') do %>
+                  👁️ <span class="sr-only"><%= t('admin.shared.show') %></span>
+                <% end %>
+                <%= link_to edit_admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "p-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition", title: t('admin.shared.edit') do %>
+                  ✏️ <span class="sr-only"><%= t('admin.shared.edit') %></span>
+                <% end %>
+                <%= button_to admin_pet_path(pet), method: :delete, data: { turbo_confirm: t('admin.pets.destroy.confirm_delete', name: pet.name) }, class: "p-2 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 transition cursor-pointer", title: t('admin.shared.delete') do %>
+                  🗑️ <span class="sr-only"><%= t('admin.shared.delete') %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- DESKTOP VIEW: Full table (visible on >= md screens) -->
+      <div class="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-600">
+            <thead class="bg-slate-50 text-xs font-semibold text-slate-400 uppercase border-b border-slate-100">
+              <tr>
+                <th class="px-6 py-3.5"><%= t('.table.name') %></th>
+                <th class="px-6 py-3.5"><%= t('.table.species_breed') %></th>
+                <th class="px-6 py-3.5"><%= t('.table.age') %></th>
+                <th class="px-6 py-3.5"><%= t('.table.status') %></th>
+                <th class="px-6 py-3.5"><%= t('.table.active_switch', default: 'Activo') %></th>
+                <th class="px-6 py-3.5 text-right"><%= t('admin.shared.actions') %></th>
               </tr>
-            <% end %>
-          <% else %>
-            <tr>
-              <td colspan="6" class="px-6 py-8 text-center text-slate-400 text-sm">
-                <%= t('.table.no_pets') %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <!--Paginate-->
-      <%= render 'admin/shared/pagination', pagy: @pagy %>
-    </div>
-  </div>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @pets.each do |pet| %>
+                <tr class="hover:bg-slate-50/50 transition">
+                  <td class="px-6 py-4 font-semibold text-slate-900">
+                    <%= link_to admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "flex items-center gap-3 hover:text-emerald-600 transition group" do %>
+                      <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base group-hover:bg-emerald-50 transition">
+                        <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+                      </div>
+                      <span><%= pet.name %></span>
+                    <% end %>
+                  </td>
+                  
+                  <!-- Breed / Species -->
+                  <td class="px-6 py-4">
+                    <span class="font-semibold text-slate-800 block"><%= pet.breed&.name || t('.table.no_breed') %></span>
+                    <span class="text-slate-400 text-xs capitalize">
+                      <%= pet.breed&.species.present? ? t("activerecord.attributes.breed/species.#{pet.breed.species.downcase}", default: pet.breed.species) : "N/A" %>
+                    </span>
+                  </td>
+
+                  <!-- Age -->
+                  <td class="px-6 py-4 text-slate-600">
+                    <%= pet.formatted_age %>
+                  </td>
+
+                  <!-- Adoption Status Badge -->
+                  <td class="px-6 py-4">
+                    <% badge_class = case pet.status
+                       when 'available' then 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                       when 'in_process' then 'bg-amber-50 text-amber-700 border-amber-200'
+                       when 'adopted' then 'bg-slate-100 text-slate-600 border-slate-200'
+                       else 'bg-slate-50 text-slate-600 border-slate-200'
+                       end %>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border <%= badge_class %>">
+                      <%= t("activerecord.attributes.pet/status.#{pet.status}", default: pet.status.humanize) %>
+                    </span>
+                  </td>
+
+                  <!-- Interactive Active Toggle Switch -->
+                  <td class="px-6 py-4">
+                    <% if pet.active? %>
+                      <%= button_to admin_pet_path(pet, pet: { active: false }), 
+                                    method: :patch, 
+                                    title: t('admin.shared.click_to_deactivate'),
+                                    class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
+                        <div class="w-9 h-5 bg-emerald-500 rounded-full transition-colors relative p-0.5 group-hover:bg-emerald-600 shadow-inner">
+                          <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-4 transition-transform"></div>
+                        </div>
+                        <span class="text-xs font-semibold text-emerald-700 select-none">
+                          <%= t('admin.shared.status_active') %>
+                        </span>
+                      <% end %>
+                    <% else %>
+                      <%= button_to admin_pet_path(pet, pet: { active: true }), 
+                                    method: :patch, 
+                                    title: t('admin.shared.click_to_activate'),
+                                    class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
+                        <div class="w-9 h-5 bg-slate-300 rounded-full transition-colors relative p-0.5 group-hover:bg-slate-400 shadow-inner">
+                          <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-0 transition-transform"></div>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500 select-none">
+                          <%= t('admin.shared.status_inactive') %>
+                        </span>
+                      <% end %>
+                    <% end %>
+                  </td>
+
+                  <!-- Actions Column -->
+                  <td class="px-6 py-4 text-right space-x-2">
+                    <%= link_to t('admin.shared.show'), admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "text-xs font-semibold text-slate-600 hover:text-slate-900 transition" %>
+                    <%= link_to t('admin.shared.edit'), edit_admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
+                    <%= button_to t('admin.shared.delete'), admin_pet_path(pet), method: :delete, data: { turbo_confirm: t('admin.pets.destroy.confirm_delete', name: pet.name) }, class: "inline-block text-xs font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Shared pagination for both mobile and desktop -->
+      <div class="bg-white border-t border-slate-100 p-4">
+        <%= render 'admin/shared/pagination', pagy: @pagy %>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8 text-center text-slate-400 text-sm">
+        <%= t('.table.no_pets') %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

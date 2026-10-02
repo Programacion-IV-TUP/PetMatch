@@ -193,6 +193,8 @@ es:
         previous: "Anterior"
         next: "Siguiente"
         page_info: "Página %{page} de %{pages}"
+      choose_file: "Seleccionar archivo"
+      no_file_chosen: "Ningún archivo seleccionado"
 
     pets:
       create:

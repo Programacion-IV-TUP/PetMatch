@@ -4,7 +4,7 @@
   <!-- Header & Actions -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
-      <h3 class="text-2xl font-bold text-slate-800"><%= t('.title') %></h3>
+      <h3 class="text-xl md:text-2xl font-bold text-slate-800"><%= t('.title') %></h3>
       <p class="text-xs text-slate-500 mt-0.5"><%= t('.subtitle') %></p>
     </div>
     <%= link_to new_admin_shelter_path, class: "inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition" do %>
@@ -14,7 +14,7 @@
 
   <!-- Search & Filters -->
   <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-6">
-    <%= form_with url: admin_shelters_path, method: :get, data: { turbo_frame: "_top" }, class: "flex flex-wrap items-center gap-3" do |f| %>
+    <%= form_with url: admin_shelters_path, method: :get, data: { turbo_frame: "shelters_list" }, class: "flex flex-wrap items-center gap-3" do |f| %>
       <div class="flex-1 min-w-[200px]">
         <%= f.text_field :query, value: params[:query], placeholder: t('.search_placeholder'), class: "w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:ring-emerald-500 focus:border-emerald-500" %>
       </div>
@@ -33,96 +33,159 @@
       <%= f.submit t('.filter_button'), class: "px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-xs rounded-xl shadow-sm transition cursor-pointer" %>
       
       <% if params[:query].present? || params[:active].present? %>
-        <%= link_to t('.clear_filters'), admin_shelters_path, class: "text-xs font-semibold text-rose-600 hover:text-rose-700 transition" %>
+        <%= link_to t('.clear_filters'), admin_shelters_path, data: { turbo_frame: "shelters_list" }, class: "text-xs font-semibold text-rose-600 hover:text-rose-700 transition" %>
       <% end %>
     <% end %>
   </div>
 
-  <!-- Shelters Table -->
-  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
-            <th class="py-3.5 px-6"><%= t('.table.name') %></th>
-            <th class="py-3.5 px-6"><%= t('.table.city') %></th>
-            <th class="py-3.5 px-6"><%= t('.table.address') %></th>
-            <th class="py-3.5 px-6"><%= t('.table.phone') %></th>
-            <th class="py-3.5 px-6 text-center"><%= t('.table.pets_count') %></th>
-            <th class="py-3.5 px-6"><%= t('.table.active_switch') %></th>
-            <th class="py-3.5 px-6 text-right"><%= t('admin.shared.actions') %></th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
-          <% if @shelters.any? %>
-            <% @shelters.each do |shelter| %>
-              <tr class="hover:bg-slate-50/50 transition">
-                <td class="py-4 px-6 font-bold text-slate-800">
-                  <%= link_to shelter.name, admin_shelter_path(shelter), class: "hover:text-emerald-600 transition" %>
-                </td>
-                <td class="py-4 px-6 text-slate-600">
-                  <%= shelter.address&.city&.name || "-" %>
-                </td>
-                <td class="py-4 px-6 text-slate-600">
-                  <%= shelter.address&.full_address || "-" %>
-                </td>
-                <td class="py-4 px-6 text-slate-600">
-                  <%= shelter.phone.presence || "-" %>
-                </td>
-                <td class="py-4 px-6 text-center">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                    <%= shelter.pets.count rescue 0 %>
-                  </span>
-                </td>
+  <!-- Hotwire Turbo Frame for list updates -->
+  <%= turbo_frame_tag "shelters_list" do %>
+    <% if @shelters.any? %>
+      <!-- MOBILE VIEW: Compact cards (visible on < md screens) -->
+      <div class="grid grid-cols-1 gap-4 md:hidden">
+        <% @shelters.each do |shelter| %>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+            <!-- Header -->
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-lg flex-shrink-0">
+                  🏠
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm"><%= shelter.name %></h4>
+                  <p class="text-xs text-slate-500"><%= shelter.address&.city&.name || "-" %></p>
+                </div>
+              </div>
 
-                <!-- Interactive Active Toggle Switch -->
-                <td class="px-6 py-4">
-                  <% if shelter.active? %>
-                    <%= button_to admin_shelter_path(shelter, shelter: { active: false }), 
-                                  method: :patch, 
-                                  title: t('admin.shared.click_to_deactivate'),
-                                  class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
-                      <div class="w-9 h-5 bg-emerald-500 rounded-full transition-colors relative p-0.5 group-hover:bg-emerald-600 shadow-inner">
-                        <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-4 transition-transform"></div>
-                      </div>
-                      <span class="text-xs font-semibold text-emerald-700 select-none">
-                        <%= t('admin.shared.status_active') %>
-                      </span>
-                    <% end %>
-                  <% else %>
-                    <%= button_to admin_shelter_path(shelter, shelter: { active: true }), 
-                                  method: :patch, 
-                                  title: t('admin.shared.click_to_activate'),
-                                  class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
-                      <div class="w-9 h-5 bg-slate-300 rounded-full transition-colors relative p-0.5 group-hover:bg-slate-400 shadow-inner">
-                        <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-0 transition-transform"></div>
-                      </div>
-                      <span class="text-xs font-semibold text-slate-500 select-none">
-                        <%= t('admin.shared.status_inactive') %>
-                      </span>
-                    <% end %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 flex-shrink-0">
+                🐾 <%= shelter.pets.count rescue 0 %>
+              </span>
+            </div>
+
+            <!-- Details -->
+            <div class="text-xs text-slate-600 space-y-1">
+              <p><span class="font-semibold"><%= t('.table.address') %>:</span> <%= shelter.address&.full_address || "-" %></p>
+              <p><span class="font-semibold"><%= t('.table.phone') %>:</span> <%= shelter.phone.presence || "-" %></p>
+            </div>
+
+            <!-- Footer & Actions -->
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs">
+              <!-- Mobile active switch -->
+              <div>
+                <% if shelter.active? %>
+                  <%= button_to admin_shelter_path(shelter, shelter: { active: false }), 
+                                method: :patch, 
+                                title: t('admin.shared.click_to_deactivate'),
+                                class: "flex items-center gap-1.5 cursor-pointer focus:outline-none" do %>
+                    <div class="w-7 h-4 bg-emerald-500 rounded-full relative p-0.5">
+                      <div class="w-3 h-3 bg-white rounded-full shadow-xs transform translate-x-3 transition-transform"></div>
+                    </div>
+                    <span class="text-[11px] font-semibold text-emerald-700"><%= t('admin.shared.status_active') %></span>
                   <% end %>
-                </td>
+                <% else %>
+                  <%= button_to admin_shelter_path(shelter, shelter: { active: true }), 
+                                method: :patch, 
+                                title: t('admin.shared.click_to_activate'),
+                                class: "flex items-center gap-1.5 cursor-pointer focus:outline-none" do %>
+                    <div class="w-7 h-4 bg-slate-300 rounded-full relative p-0.5">
+                      <div class="w-3 h-3 bg-white rounded-full shadow-xs transform translate-x-0 transition-transform"></div>
+                    </div>
+                    <span class="text-[11px] font-semibold text-slate-500"><%= t('admin.shared.status_inactive') %></span>
+                  <% end %>
+                <% end %>
+              </div>
 
-                <!-- Actions -->
-                <td class="py-4 px-6 text-right space-x-2">
-                  <%= link_to t('admin.shared.show'), admin_shelter_path(shelter), class: "font-semibold text-slate-600 hover:text-slate-900 transition" %>
-                  <%= link_to t('admin.shared.edit'), edit_admin_shelter_path(shelter), class: "font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
-                  <%= button_to t('admin.shared.delete'), admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelters.destroy.confirm', name: shelter.name) }, class: "inline-block font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
-                </td>
+              <!-- Action icons -->
+              <div class="flex items-center gap-2">
+                <%= link_to admin_shelter_path(shelter), data: { turbo_frame: "_top" }, class: "p-2 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition", title: t('admin.shared.show') do %>
+                  👁️ <span class="sr-only"><%= t('admin.shared.show') %></span>
+                <% end %>
+                <%= link_to edit_admin_shelter_path(shelter), data: { turbo_frame: "_top" }, class: "p-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition", title: t('admin.shared.edit') do %>
+                  ✏️ <span class="sr-only"><%= t('admin.shared.edit') %></span>
+                <% end %>
+                <%= button_to admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelters.destroy.confirm', name: shelter.name) }, class: "p-2 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 transition cursor-pointer", title: t('admin.shared.delete') do %>
+                  🗑️ <span class="sr-only"><%= t('admin.shared.delete') %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- DESKTOP VIEW: Full table (visible on >= md screens) -->
+      <div class="hidden md:block bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs text-slate-700">
+            <thead>
+              <tr class="bg-slate-50/80 border-b border-slate-100 text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+                <th class="py-3.5 px-6"><%= t('.table.name') %></th>
+                <th class="py-3.5 px-6"><%= t('.table.city') %></th>
+                <th class="py-3.5 px-6"><%= t('.table.address') %></th>
+                <th class="py-3.5 px-6"><%= t('.table.phone') %></th>
+                <th class="py-3.5 px-6 text-center"><%= t('.table.pets_count') %></th>
+                <th class="py-3.5 px-6"><%= t('.table.active_switch') %></th>
+                <th class="py-3.5 px-6 text-right"><%= t('admin.shared.actions') %></th>
               </tr>
-            <% end %>
-          <% else %>
-            <tr>
-              <td colspan="7" class="py-12 text-center text-slate-400 text-xs">
-                <%= t('.empty') %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <!--Paginate-->
-      <%= render 'admin/shared/pagination', pagy: @pagy %>
-    </div>
-  </div>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @shelters.each do |shelter| %>
+                <tr class="hover:bg-slate-50/50 transition">
+                  <td class="py-4 px-6 font-bold text-slate-800">
+                    <%= link_to shelter.name, admin_shelter_path(shelter), data: { turbo_frame: "_top" }, class: "hover:text-emerald-600 transition" %>
+                  </td>
+                  <td class="py-4 px-6 text-slate-600"><%= shelter.address&.city&.name || "-" %></td>
+                  <td class="py-4 px-6 text-slate-600"><%= shelter.address&.full_address || "-" %></td>
+                  <td class="py-4 px-6 text-slate-600"><%= shelter.phone.presence || "-" %></td>
+                  <td class="py-4 px-6 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                      <%= shelter.pets.count rescue 0 %>
+                    </span>
+                  </td>
+
+                  <td class="px-6 py-4">
+                    <% if shelter.active? %>
+                      <%= button_to admin_shelter_path(shelter, shelter: { active: false }), 
+                                    method: :patch, 
+                                    title: t('admin.shared.click_to_deactivate'),
+                                    class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
+                        <div class="w-9 h-5 bg-emerald-500 rounded-full transition-colors relative p-0.5 group-hover:bg-emerald-600 shadow-inner">
+                          <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-4 transition-transform"></div>
+                        </div>
+                        <span class="text-xs font-semibold text-emerald-700 select-none"><%= t('admin.shared.status_active') %></span>
+                      <% end %>
+                    <% else %>
+                      <%= button_to admin_shelter_path(shelter, shelter: { active: true }), 
+                                    method: :patch, 
+                                    title: t('admin.shared.click_to_activate'),
+                                    class: "group flex items-center gap-2 cursor-pointer focus:outline-none" do %>
+                        <div class="w-9 h-5 bg-slate-300 rounded-full transition-colors relative p-0.5 group-hover:bg-slate-400 shadow-inner">
+                          <div class="w-4 h-4 bg-white rounded-full shadow-md transform translate-x-0 transition-transform"></div>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500 select-none"><%= t('admin.shared.status_inactive') %></span>
+                      <% end %>
+                    <% end %>
+                  </td>
+
+                  <td class="py-4 px-6 text-right space-x-2">
+                    <%= link_to t('admin.shared.show'), admin_shelter_path(shelter), data: { turbo_frame: "_top" }, class: "font-semibold text-slate-600 hover:text-slate-900 transition" %>
+                    <%= link_to t('admin.shared.edit'), edit_admin_shelter_path(shelter), data: { turbo_frame: "_top" }, class: "font-semibold text-emerald-600 hover:text-emerald-700 transition" %>
+                    <%= button_to t('admin.shared.delete'), admin_shelter_path(shelter), method: :delete, data: { turbo_confirm: t('admin.shelters.destroy.confirm', name: shelter.name) }, class: "inline-block font-semibold text-rose-600 hover:text-rose-700 transition cursor-pointer" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="bg-white border-t border-slate-100 p-4 rounded-b-2xl">
+        <%= render 'admin/shared/pagination', pagy: @pagy %>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8 text-center text-slate-400 text-sm">
+        <%= t('.empty') %>
+      </div>
+    <% end %>
+  <% end %>
 </div>
