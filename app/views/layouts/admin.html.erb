@@ -107,12 +107,17 @@
           <!-- User Footer -->
           <div class="p-4 border-t border-slate-800 flex items-center justify-between flex-shrink-0">
             <div class="flex items-center gap-3 min-w-0">
-              <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
-                <%= current_user&.first_name&.first || "A" %>
-              </div>
-              <div class="text-xs truncate">
-                <p class="font-semibold text-slate-200 truncate"><%= current_user&.first_name %></p>
-                <p class="text-slate-400 capitalize truncate"><%= current_user&.shelter&.name || current_user&.role %></p>
+              <% if Current.user&.avatar&.attached? %>
+                <%= image_tag Current.user.avatar, class: "w-10 h-10 rounded-full object-cover border border-gray-600" %>
+              <% else %>
+                <div class="w-10 h-10 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center">
+                  <%= Current.user&.first_name&.first&.upcase || "U" %>
+                </div>
+              <% end %>
+
+              <div class="flex flex-col overflow-hidden">
+                <span class="font-semibold text-white text-sm truncate"><%= Current.user&.first_name %></span>
+                <span class="text-xs text-gray-400 truncate"><%= Current.user&.shelter&.name %></span>
               </div>
             </div>
             <%= button_to session_path, method: :delete, class: "text-slate-400 hover:text-rose-400 text-xs font-semibold cursor-pointer p-1" do %>
