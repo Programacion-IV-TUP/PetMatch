@@ -21,6 +21,9 @@ gem "jwt"
 # Rack CORS
 gem "rack-cors"
 
+# Postgresql
+gem "pg"
+
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
