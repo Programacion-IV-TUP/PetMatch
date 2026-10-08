@@ -35,7 +35,10 @@
       <%= f.label :avatar, class: "block text-xs font-semibold text-slate-700 mb-1.5" %>
       <div class="flex items-center gap-4">
         <% if user.avatar.attached? && user.avatar.persisted? %>
-          <%= image_tag user.avatar, class: "w-16 h-16 rounded-full object-cover border border-slate-200 shadow-sm" %>
+          <%= optimized_image_tag user.avatar,
+                        variant_options: { resize_to_fill: [100, 100], crop: :fill, gravity: :face },
+                        class: "w-16 h-16 rounded-full object-cover border border-slate-200 shadow-sm",
+                        alt: user.full_name %>
         <% else %>
           <div class="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-lg">
             <%= user.first_name&.first || "U" %>
@@ -51,7 +54,10 @@
             <!-- Current Preview -->
             <div data-file-preview-target="previewContainer" class="flex items-center gap-2">
               <% if user.avatar.attached? %>
-                <%= image_tag user.avatar, class: "w-12 h-12 rounded-full object-cover border border-slate-200" %>
+                <%= optimized_image_tag user.avatar,
+                        variant_options: { resize_to_fill: [100, 100] },
+                        class: "w-16 h-16 rounded-full object-cover border border-slate-200 shadow-sm",
+                        alt: user.full_name %>
               <% else %>
                 <div class="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 text-xs font-bold">
                   <%= user.first_name.presence&.first || "U" %>
