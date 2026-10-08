@@ -1,30 +1,39 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::Users", type: :request do
-  describe "GET /index" do
+  let(:city) { City.create!(name: "La Plata", state: "Buenos Aires") }
+  let(:address) { Address.create!(street: "Calle 7", number: "123", city: city) }
+  let(:admin) { User.create!(first_name: "Admin", last_name: "User", email_address: "admin@test.com", password: "password123", address: address, role: :admin) }
+  let(:target_user) { User.create!(first_name: "Juan", last_name: "Pérez", email_address: "juan@test.com", password: "password123", address: address) }
+
+  before do
+    post session_path, params: { email_address: admin.email_address, password: "password123" }
+  end
+
+  describe "GET /admin/users" do
     it "returns http success" do
-      get "/admin/users/index"
+      get admin_users_path
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /show" do
+  describe "GET /admin/users/:id" do
     it "returns http success" do
-      get "/admin/users/show"
+      get admin_user_path(target_user)
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /new" do
+  describe "GET /admin/users/new" do
     it "returns http success" do
-      get "/admin/users/new"
+      get new_admin_user_path
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe "GET /edit" do
+  describe "GET /admin/users/:id/edit" do
     it "returns http success" do
-      get "/admin/users/edit"
+      get edit_admin_user_path(target_user)
       expect(response).to have_http_status(:success)
     end
   end
