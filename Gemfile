@@ -13,7 +13,7 @@ gem "tailwindcss-rails"
 gem "active_storage_validations"
 
 # Pagination
-gem "pagy", "~> 8.4"
+gem "pagy", "~> 43.7"
 
 # Json Web Token
 gem "jwt"
