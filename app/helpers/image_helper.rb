@@ -1,6 +1,13 @@
 module ImageHelper
   def optimized_image_tag(attachment, options = {})
-    return unless attachment.attached?
+    return if attachment.blank?
+
+    if attachment.respond_to?(:attached?)
+      return unless attachment.attached?
+    end
+
+    blob_key = attachment.respond_to?(:key) ? attachment.key : attachment.blob&.key
+    return if blob_key.blank?
 
     # Production: Takes advantage of the native transformations of the Cloudinary CDN
     if ActiveStorage::Blob.service.class.name.include?("Cloudinary")
@@ -13,12 +20,12 @@ module ImageHelper
       # Apply resize if it comes in the options
       if (variant_opts = options[:variant_options])
         if variant_opts[:resize_to_limit]
-          w, h = variant_opts[:resize_to_limit]
+          w, h = variant_opts[:resize_to_limit].first(2)
           cl_options[:width] = w
           cl_options[:height] = h
           cl_options[:crop] = :limit
         elsif variant_opts[:resize_to_fill]
-          w, h = variant_opts[:resize_to_fill]
+          w, h = variant_opts[:resize_to_fill].first(2)
           cl_options[:width] = w
           cl_options[:height] = h
           cl_options[:crop] = variant_opts[:crop] || :fill
@@ -26,7 +33,7 @@ module ImageHelper
         end
       end
 
-      cl_image_tag(attachment.key, cl_options)
+      cl_image_tag(blob_key, cl_options)
     else
       # Development / Local / Pure S3: Use standard Active Storage variants
       variant_opts = options.delete(:variant_options) || {}

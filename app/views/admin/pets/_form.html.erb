@@ -72,7 +72,7 @@
       <div data-file-preview-target="previewContainer" class="flex flex-wrap items-center gap-2 mb-2">
         <% if pet.photos.attached? %>
           <% pet.photos.each do |photo| %>
-            <% optimized_image_tag pet.photos.first,
+            <%= optimized_image_tag pet.photos.first,
                         variant_options: { resize_to_fill: [100, 100, { crop: :fill, gravity: :auto }] },
                         class: "w-20 h-20 rounded-xl object-cover border border-slate-200 shadow-sm",
                         alt: pet.name %>
