@@ -1,6 +1,6 @@
 # 🐾 PetMatch API & Back-Office
 
-Plataforma integral para la gestión y adopción responsable de mascotas. Desarrollada sobre **Ruby on Rails 8** con SQLite3, interfaz administrativa en Hotwire/TailwindCSS y una API RESTful desacoplada con autenticación basada en JWT para clientes móviles o web.
+Plataforma integral para la gestión y adopción responsable de mascotas. Desarrollada sobre **Ruby on Rails 8** con SQLite3 (desarrollo) y PostgreSQL (producción), interfaz administrativa responsiva en Hotwire (Turbo + Stimulus) y Tailwind CSS, optimización y almacenamiento multimedia con Cloudinary, suite de pruebas automatizadas en RSpec y una API RESTful desacoplada con autenticación basada en JWT para clientes móviles o web.
 
 ---
 
@@ -11,7 +11,10 @@ Plataforma integral para la gestión y adopción responsable de mascotas. Desarr
 - [Instalación y Ejecución](#-instalación-y-ejecución)
 - [Preparación de la Base de Datos](#-preparación-de-la-base-de-datos)
 - [Acceso al Back-Office y Credenciales](#-acceso-al-back-office-y-credenciales)
+- [Almacenamiento y Optimización Multimedia](#-almacenamiento-y-optimización-multimedia)
+- [Pruebas y Calidad de Código](#-pruebas-y-calidad-de-código)
 - [API RESTful (v1)](#-api-restful-v1)
+- [Despliegue en Producción (Render & PostgreSQL)](#-despliegue-en-producción-render--postgresql)
 - [Modelo de Datos](#-modelo-de-datos)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 
@@ -19,15 +22,18 @@ Plataforma integral para la gestión y adopción responsable de mascotas. Desarr
 
 ## 🚀 Características Principales
 
-- **Back-Office Administrativo**: Panel de control con interfaz moderna en Tailwind CSS para la administración de mascotas, refugios, registros médicos, usuarios y solicitudes de adopción.
+- **Back-Office Administrativo Responsivo**: Panel de control con interfaz moderna en Tailwind CSS y Hotwire (Turbo + Stimulus) para la administración de mascotas, refugios, registros médicos, usuarios y solicitudes de adopción. Incluye navegación lateral colapsable para dispositivos móviles (`sidebar_controller`) y visualización adaptativa (tarjetas en móvil y tablas en desktop).
+- **Previsualización de Archivos en Tiempo Real**: Controlador Stimulus (`file_preview_controller`) que permite previsualizar instantáneamente imágenes de mascotas y avatares de usuarios antes de enviar los formularios.
+- **Almacenamiento y Optimización Multimedia en la Nube**: Configuración multi-entorno con Active Storage (disco local para desarrollo y **Cloudinary** para producción). Procesamiento dinámico de variantes: redimensionamiento inteligente, detección facial/gravedad (`gravity: :face`), optimización automática de formato y calidad (`format: :auto`, `quality: :auto` para WebP/AVIF) y carga diferida (`loading: "lazy"`).
 - **Roles y Permisos**:
   - `admin`: Superadministrador con control total del sistema.
   - `shelter_manager`: Gestor enfocado en las mascotas y solicitudes de su refugio asignado.
   - `adopter`: Usuario final que consulta mascotas y envía solicitudes vía API.
 - **API RESTful Segura**: Endpoints versionados (`/api/v1`) con autenticación mediante JSON Web Tokens (JWT).
-- **Gestión Multimedia**: Subida y procesamiento de fotos y avatares con Active Storage.
 - **Ciclo de Adopción Automatizado**: Cambios automáticos de estado en las mascotas al aprobar o cancelar solicitudes de adopción.
-- **Internacionalización (i18n)**: Soporte de idiomas configurable por sesión web y mediante cabecera `Accept-Language` en la API.
+- **Internacionalización (i18n)**: Soporte de idiomas configurable por sesión web, selector de idioma visual en el panel y en la pantalla de inicio de sesión (`/session/new`), y cabecera `Accept-Language` en la API.
+- **Calidad de Código y Pruebas Automatizadas**: Suite completa de pruebas con **RSpec Rails**, análisis estático de vulnerabilidades (`brakeman`, `bundler-audit`, `importmap audit`) y linter de estilo con RuboCop (`rubocop-rails-omakase`).
+- **Listo para Producción en la Nube**: Configuración lista para despliegue en **Render** (`render.yaml`) utilizando base de datos **PostgreSQL** (Neon) y compilación automatizada (`render-build.sh`).
 
 ---
 
@@ -38,7 +44,8 @@ Asegúrate de contar con las siguientes herramientas instaladas en tu entorno:
 - **Ruby**: versión 3.x o superior (verificado con Ruby 3.3+ / 4.0)
 - **Ruby on Rails**: 8.1.3+
 - **Bundler**: `gem install bundler`
-- **SQLite3**: versión 3.8 o superior
+- **SQLite3**: versión 3.8 o superior (para desarrollo local)
+- **PostgreSQL**: versión 14+ (opcional para desarrollo local, requerido para producción)
 - **Git**
 
 ---
@@ -148,6 +155,85 @@ Navega en tu navegador a:
 | **Gestor de Refugio (La Plata)** | `manager@refugiolaplata.org` | `password123` | Gestión limitada al "Refugio Mascotas La Plata": sus mascotas, historial médico y solicitudes. |
 | **Gestor de Refugio (Bs As)** | `manager@refugiobuenosaires.org` | `password123` | Gestión limitada al "Refugio Mascotas Buenos Aires". |
 | **Adoptante (Usuario App)** | `adoptante@ejemplo.com` | `password123` | Usuario final para pruebas de API de adoptantes. No tiene acceso al panel `/admin`. |
+
+---
+
+## 🖼 Almacenamiento y Optimización Multimedia
+
+PetMatch utiliza **Active Storage** configurado para operar de forma eficiente y desacoplada según el entorno de ejecución:
+
+- **Desarrollo y Testing**: Almacenamiento local en disco (`storage/` y `tmp/storage`).
+- **Producción**: Almacenamiento y CDN global en la nube mediante **Cloudinary** (`service: Cloudinary`).
+
+### Características de Optimización de Imágenes
+- **Variantes Dinámicas en Tiempo Real**: Procesamiento automático para avatares, logos y fotos de mascotas (`resize_to_limit`, `resize_to_fill`).
+- **Recorte Inteligente (`Gravity`)**:
+  - Detección facial (`gravity: :face`) en avatares de usuarios para asegurar que los rostros siempre queden perfectamente encuadrados.
+  - Centrado automático (`gravity: :auto`) en las fotos y miniaturas de mascotas.
+- **Formato y Calidad Adaptativos**: Se aplican directivas `format: :auto` y `quality: :auto`, permitiendo que Cloudinary entregue formatos modernos y livianos (WebP o AVIF) según la compatibilidad del navegador.
+- **Carga Diferida (`Lazy Loading`)**: Todas las imágenes en galerías, tablas y tarjetas utilizan `loading: "lazy"` para optimizar la velocidad de carga inicial de las vistas.
+- **Previsualización Interactiva en Frontend**: Mediante el controlador Stimulus `file_preview_controller.js`, los usuarios y administradores pueden previsualizar instantáneamente sus imágenes en el navegador antes de enviarlas al servidor.
+
+---
+
+## 🧪 Pruebas y Calidad de Código
+
+El proyecto cuenta con una suite completa de pruebas automatizadas y herramientas de análisis estático de código y seguridad.
+
+### 1. Ejecución de Pruebas con RSpec
+La suite de pruebas está construida con **RSpec Rails** (`spec/`), abarcando pruebas unitarias de modelos, validaciones, callbacks de negocio, peticiones a la API RESTful (`requests`) y correos transaccionales (`mailers`).
+
+Para preparar el entorno y ejecutar las pruebas:
+
+```bash
+# 1. Compilar Tailwind CSS (necesario para vistas y pruebas de sistema)
+bin/rails tailwindcss:build
+
+# 2. Preparar la base de datos de pruebas
+bin/rails db:test:prepare
+
+# 3. Ejecutar toda la suite de RSpec
+bundle exec rspec
+```
+
+También es posible ejecutar archivos o carpetas específicas:
+```bash
+# Pruebas de modelos
+bundle exec rspec spec/models/pet_spec.rb
+
+# Pruebas de integración de la API
+bundle exec rspec spec/requests/api/v1/pets_spec.rb
+
+# Pruebas de mailers
+bundle exec rspec spec/mailers/
+```
+
+### 2. Linters y Auditorías de Seguridad
+Se incluyen scripts ejecutables en `bin/` para garantizar la robustez, el estilo de código y la ausencia de vulnerabilidades:
+
+- **Linter de código (RuboCop Omakase + RSpec)**:
+  ```bash
+  bin/rubocop
+  ```
+- **Auditoría de vulnerabilidades en código Rails (Brakeman)**:
+  ```bash
+  bin/brakeman --no-pager
+  ```
+- **Auditoría de dependencias Ruby (Bundler Audit)**:
+  ```bash
+  bin/bundler-audit
+  ```
+- **Auditoría de dependencias JavaScript (Importmap Audit)**:
+  ```bash
+  bin/importmap audit
+  ```
+
+### 3. Integración Continua (CI en GitHub Actions)
+El repositorio cuenta con un pipeline automatizado en `.github/workflows/ci.yml` que se ejecuta en cada Pull Request y push a la rama `master`:
+- **`scan_ruby`**: Análisis estático de seguridad con Brakeman y Bundler Audit.
+- **`scan_js`**: Auditoría de seguridad en paquetes JS con Importmap Audit.
+- **`lint`**: Verificación de estilo y buenas prácticas con RuboCop.
+- **`test` / `system-test`**: Preparación de base de datos, compilación de assets y ejecución completa de los tests de RSpec.
 
 ---
 
@@ -272,6 +358,37 @@ curl -X POST http://localhost:3000/api/v1/adoption_applications \
     }
   }'
 ```
+
+---
+
+## 🚀 Despliegue en Producción (Render & PostgreSQL)
+
+El repositorio está preconfigurado para un despliegue ágil en **Render** (o servicios cloud equivalentes) utilizando **PostgreSQL** (como [Neon](https://neon.tech/) o Render Postgres) y almacenamiento en **Cloudinary**.
+
+### Archivos de Configuración Incluidos
+- **`render.yaml`**: Blueprint de infraestructura como código (IaC) para Render:
+  - Define el servicio web (`petmatch-web`) en entorno Ruby con Puma.
+  - Concurrencia optimizada mediante `WEB_CONCURRENCY=2`.
+  - Servido directo de assets compilados (`RAILS_SERVE_STATIC_FILES=true`).
+- **`bin/render-build.sh`**: Script de construcción y preparación automatizado:
+  ```bash
+  bundle install
+  bin/rails assets:precompile
+  bin/rails assets:clean
+  bin/rails db:migrate
+  bin/rails db:seed
+  ```
+
+### Variables de Entorno Requeridas
+Para el correcto funcionamiento en producción, define las siguientes variables de entorno en el panel de tu proveedor:
+
+| Variable | Descripción | Ejemplo / Formato |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | Cadena de conexión a PostgreSQL | `postgresql://user:password@ep-host.neon.tech/petmatch_db?sslmode=require` |
+| `RAILS_MASTER_KEY` | Clave maestra para desencriptar credenciales | Valor en `config/master.key` |
+| `CLOUDINARY_URL` | URL de conexión al servicio de Cloudinary | `cloudinary://API_KEY:API_SECRET@CLOUD_NAME` |
+| `RAILS_SERVE_STATIC_FILES` | Permite que Rails sirva assets compilados | `true` |
+| `WEB_CONCURRENCY` | Cantidad de workers en paralelo para Puma | `2` |
 
 ---
 
@@ -405,11 +522,15 @@ erDiagram
 
 ```text
 PetMatch/
+├── .github/
+│   └── workflows/ci.yml       # Pipeline de integración continua (CI en GitHub Actions)
 ├── app/
 │   ├── controllers/
 │   │   ├── admin/             # Controladores del Back-Office (Web)
 │   │   ├── api/v1/            # Controladores de la API RESTful (JSON)
 │   │   └── concerns/          # Módulos compartidos (Authentication)
+│   ├── javascript/
+│   │   └── controllers/       # Controladores Stimulus (vista previa de imágenes, sidebar responsivo)
 │   ├── mailers/               # Correos electrónicos transaccionales
 │   ├── models/                # Modelos de dominio y reglas de negocio
 │   ├── services/
@@ -417,15 +538,25 @@ PetMatch/
 │   └── views/
 │       ├── admin/             # Vistas HTML/Tailwind para el Back-Office
 │       └── layouts/           # Plantillas generales y de administración
+├── bin/
+│   ├── dev                    # Script de arranque en desarrollo (Puma + Tailwind)
+│   ├── render-build.sh        # Script de build, migraciones y seeds para Render
+│   ├── brakeman               # Auditoría estática de seguridad Rails
+│   ├── bundler-audit          # Auditoría de vulnerabilidades en dependencias
+│   ├── rubocop                # Linter de código Ruby
+│   └── rails                  # CLI de Ruby on Rails
 ├── config/
+│   ├── database.yml           # Configuración de base de datos (SQLite3 / PostgreSQL)
 │   ├── routes.rb              # Definición de rutas Web y API
-│   └── database.yml           # Configuración de SQLite3
+│   └── storage.yml            # Servicios de almacenamiento (Disco local / Cloudinary)
 ├── db/
 │   ├── migrate/               # Migraciones de base de datos
 │   ├── schema.rb              # Esquema de la base de datos
 │   └── seeds.rb               # Datos iniciales para pruebas y desarrollo
+├── spec/                      # Suite de pruebas automatizadas en RSpec
+│   ├── models/                # Pruebas unitarias de modelos
+│   ├── requests/              # Pruebas de integración para endpoints de la API
+│   └── mailers/               # Pruebas de correos transaccionales
 ├── storage/                   # Base de datos SQLite3 y archivos locales
-└── bin/
-    ├── dev                    # Script de arranque en desarrollo (Puma + Tailwind)
-    └── rails                  # CLI de Ruby on Rails
+└── render.yaml                # Blueprint de infraestructura para despliegue en Render
 ```
