@@ -97,7 +97,7 @@
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0">
                   <% if pet.photos.attached? %>
-                    <% optimized_image_tag pet.photos.first,
+                    <%= optimized_image_tag pet.photos.first,
                         variant_options: { resize_to_fill: [100, 100, { crop: :fill, gravity: :auto }] },
                         class: "w-20 h-20 rounded-full object-cover border border-slate-200 shadow-sm",
                         alt: pet.name %>
