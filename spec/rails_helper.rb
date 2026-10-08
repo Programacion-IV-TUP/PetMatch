@@ -35,6 +35,10 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.before(:suite) do
+    Rails.application.load_tasks
+    Rake::Task["tailwindcss:build"].invoke if Rake::Task.task_defined?("tailwindcss:build")
+  end
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
     Rails.root.join('spec/fixtures')
