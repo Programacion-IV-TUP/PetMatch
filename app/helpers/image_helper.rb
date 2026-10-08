@@ -30,12 +30,12 @@ module ImageHelper
     else
       # Development / Local / Pure S3: Use standard Active Storage variants
       variant_opts = options.delete(:variant_options) || {}
-      
+
       if variant_opts.present?
         # Clean up options that are not compatible with local ImageProcessing (like format: :auto)
         clean_opts = variant_opts.except(:crop, :gravity, :format, :quality)
         clean_opts[:format] = :webp
-        
+
         image_tag(attachment.variant(clean_opts), options.merge(loading: "lazy"))
       else
         image_tag(attachment, options.merge(loading: "lazy"))
