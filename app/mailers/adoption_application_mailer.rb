@@ -14,6 +14,7 @@ class AdoptionApplicationMailer < ApplicationMailer
 
   def new_application_notice(application, locale: I18n.locale)
     @application = application
+    @user = application.user
     @pet = application.pet
     @shelter = @pet.shelter
     @managers = @shelter.users.where(role: :shelter_manager, active: true)

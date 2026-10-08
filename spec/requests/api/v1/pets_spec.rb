@@ -1,15 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Pets", type: :request do
-  let!(:city) { City.create!(name: "La Plata", state: "Buenos Aires") }
-  let!(:address) { Address.create!(street: "Calle 7", number: "850", city: city) }
-  let!(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", phone: "+542214445566", address: address) }
+  let(:city) { City.create!(name: "La Plata", state: "Buenos Aires") }
+  let(:address) { Address.create!(street: "Calle 7", number: "850", city: city) }
+  let(:shelter) { Shelter.create!(name: "Refugio Patitas", email: "patitas@refugio.org", phone: "+542214445566", address: address) }
 
-  let!(:dog_breed) { Breed.create!(name: "Labrador", species: :dog) }
-  let!(:cat_breed) { Breed.create!(name: "Siamés", species: :cat) }
+  let(:dog_breed) { Breed.create!(name: "Labrador", species: :dog) }
+  let(:cat_breed) { Breed.create!(name: "Siamés", species: :cat) }
 
-  let!(:dog) { Pet.create!(name: "Milo", age_months: 24, gender: :male, size: :large, status: :available, breed: dog_breed, shelter: shelter) }
-  let!(:cat) { Pet.create!(name: "Luna", age_months: 6, gender: :female, size: :small, status: :available, breed: cat_breed, shelter: shelter) }
+  before do
+    Pet.create!(name: "Milo", age_months: 24, gender: :male, size: :large, status: :available, breed: dog_breed, shelter: shelter)
+    Pet.create!(name: "Luna", age_months: 6, gender: :female, size: :small, status: :available, breed: cat_breed, shelter: shelter)
+  end
 
   describe "GET /api/v1/pets" do
     context "con filtros aplicados" do
