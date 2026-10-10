@@ -1,11 +1,7 @@
-<%= t("mailers.user.welcome_manager.greeting", name: @user.first_name) %>
+<%= t("mailers.user.account_deactivated.greeting", name: @user.first_name) %>
 
-<%= t("mailers.user.welcome_manager.body") %>
+<%= t("mailers.user.account_deactivated.body") %>
 
-<% if @shelter.present? %>
-<%= t("mailers.user.welcome_manager.assigned_shelter") %>: <%= @shelter.name %>
-<% end %>
-
-<%= t("mailers.user.welcome_manager.instructions") %>
+<%= t("mailers.user.account_deactivated.notice") %>
 
 <%= t("mailers.shared.footer") %>
