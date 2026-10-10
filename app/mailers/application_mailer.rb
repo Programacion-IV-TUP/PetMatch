@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "soporte@petmatch.com"
+  default from: ENV.fetch("MAILER_FROM", "PetMatch <petmatch.tup@gmail.com>")
   layout "mailer"
 
   private
