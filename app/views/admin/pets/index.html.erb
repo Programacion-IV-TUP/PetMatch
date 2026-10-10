@@ -57,7 +57,7 @@
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-lg flex-shrink-0">
-                  <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+                  <%= pet_species_icon(pet) %>
                 </div>
                 <div>
                   <h4 class="font-bold text-slate-900 text-sm"><%= pet.name %></h4>
@@ -141,7 +141,7 @@
                   <td class="px-6 py-4 font-semibold text-slate-900">
                     <%= link_to admin_pet_path(pet), data: { turbo_frame: "_top" }, class: "flex items-center gap-3 hover:text-emerald-600 transition group" do %>
                       <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-base group-hover:bg-emerald-50 transition">
-                        <%= pet.breed&.species&.downcase == 'cat' ? '🐱' : '🐶' %>
+                        <%= pet_species_icon(pet) %>
                       </div>
                       <span><%= pet.name %></span>
                     <% end %>

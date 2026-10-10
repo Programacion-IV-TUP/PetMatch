@@ -1,6 +1,6 @@
 module Admin
   class PetsController < ApplicationController
-    before_action :set_pet, only: %i[show edit update destroy]
+    before_action :set_pet, only: %i[show edit update destroy purge_photo]
 
 def index
       pets = scoped_pets
@@ -42,10 +42,31 @@ def index
     end
 
     def update
+      new_photos = params[:pet].delete(:photos)
+
       if @pet.update(pet_params)
+        # If new photos are being uploaded, append them to the existing collection.
+        if new_photos.present?
+          new_photos.reject(&:blank?).each do |photo|
+            @pet.photos.attach(photo) if @pet.photos.count < 5
+          end
+        end
+
         redirect_to admin_pets_path, notice: t(".success")
       else
         render :edit, status: :unprocessable_entity
+      end
+    end
+
+    # Deletes a specific photo from a pet
+    def purge_photo
+      photo = @pet.photos.find_by(id: params[:photo_id])
+
+      if photo
+        photo.purge
+        redirect_to edit_admin_pet_path(@pet), notice: t(".photo_deleted")
+      else
+        redirect_to edit_admin_pet_path(@pet), alert: t(".photo_not_found")
       end
     end
 
@@ -70,7 +91,7 @@ def index
 
     def pet_params
       params.require(:pet).permit(
-        :name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id, :active, photos: []
+        :name, :age_months, :gender, :size, :weight, :description, :status, :breed_id, :shelter_id, :active
       )
     end
   end

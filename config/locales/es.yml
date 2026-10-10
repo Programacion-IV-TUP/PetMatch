@@ -202,6 +202,7 @@ es:
         success: "Mascota creada correctamente."
       update:
         success: "Mascota actualizada correctamente."
+        photo_deleted: "Foto eliminada correctamente."
       destroy:
         confirm_delete: "¿Confirmás eliminar definitivamente a %{name}?"
         confirm_deactivate: "¿Deseas desactivar esta mascota?"
@@ -252,6 +253,9 @@ es:
         photos_label: "Fotos de la mascota (máximo 5)"
         photos_help: "Soporta PNG, JPEG o WEBP (máx. 5MB por imagen)"
         error_header: "Corrige los siguientes errores:"
+        delete_photo: "Eliminar foto"
+        photo_not_found: "Foto no encontrada."
+        confirm_delete_photo: "¿Estás seguro de eliminar esta foto?"
 
     adoption_applications:
       update:

@@ -2,50 +2,65 @@ module ImageHelper
   def optimized_image_tag(attachment, options = {})
     return if attachment.blank?
 
+    # Prevent error if an Attached::Many proxy is passed directly
+    return if attachment.is_a?(ActiveStorage::Attached::Many)
+
+    # Handle ActiveStorage association proxies (.attached?)
     if attachment.respond_to?(:attached?)
       return unless attachment.attached?
     end
 
-    blob_key = attachment.respond_to?(:key) ? attachment.key : attachment.blob&.key
+    # Extract blob safely across Blob, Attachment, or Proxy objects
+    blob = attachment.respond_to?(:blob) ? attachment.blob : attachment
+    blob_key = blob.respond_to?(:key) ? blob.key : nil
     return if blob_key.blank?
 
-    # Production: Takes advantage of the native transformations of the Cloudinary CDN
-    if ActiveStorage::Blob.service.class.name.include?("Cloudinary")
+    html_options = options.dup
+    variant_opts = html_options.delete(:variant_options) || {}
+
+    is_cloudinary = ActiveStorage::Blob.service.class.name.include?("Cloudinary") && respond_to?(:cl_image_tag)
+
+    if is_cloudinary
       cl_options = {
         fetch_format: :auto,
         quality: :auto,
         loading: "lazy"
-      }.merge(options.except(:variant_options))
+      }.merge(html_options)
 
-      # Apply resize if it comes in the options
-      if (variant_opts = options[:variant_options])
-        if variant_opts[:resize_to_limit]
-          w, h = variant_opts[:resize_to_limit].first(2)
-          cl_options[:width] = w
-          cl_options[:height] = h
-          cl_options[:crop] = :limit
-        elsif variant_opts[:resize_to_fill]
+      if variant_opts.present?
+        if variant_opts[:resize_to_fill]
           w, h = variant_opts[:resize_to_fill].first(2)
           cl_options[:width] = w
           cl_options[:height] = h
           cl_options[:crop] = variant_opts[:crop] || :fill
           cl_options[:gravity] = variant_opts[:gravity] || :auto
+        elsif variant_opts[:resize_to_limit]
+          w, h = variant_opts[:resize_to_limit].first(2)
+          cl_options[:width] = w
+          cl_options[:height] = h
+          cl_options[:crop] = :limit
         end
       end
 
       cl_image_tag(blob_key, cl_options)
     else
-      # Development / Local / Pure S3: Use standard Active Storage variants
-      variant_opts = options.delete(:variant_options) || {}
-
+      # Local Disk / Development mode (Vips / MiniMagick)
       if variant_opts.present?
-        # Clean up options that are not compatible with local ImageProcessing (like format: :auto)
+        # Clean up Cloudinary-only options to prevent Vips::Error
         clean_opts = variant_opts.except(:crop, :gravity, :format, :quality)
+
+        # Convert dimensions for Active Storage ImageProcessing
+        if (fill_dims = variant_opts[:resize_to_fill])
+          clean_opts[:resize_to_fill] = fill_dims.first(2)
+        elsif (limit_dims = variant_opts[:resize_to_limit])
+          clean_opts[:resize_to_limit] = limit_dims.first(2)
+        end
+
         clean_opts[:format] = :webp
 
-        image_tag(attachment.variant(clean_opts), options.merge(loading: "lazy"))
+        image_tag(blob.variant(clean_opts), html_options.merge(loading: "lazy"))
       else
-        image_tag(attachment, options.merge(loading: "lazy"))
+        image_tag(blob, html_options.merge(loading: "lazy"))
       end
     end
   end
