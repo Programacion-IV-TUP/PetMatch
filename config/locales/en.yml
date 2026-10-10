@@ -201,6 +201,7 @@ en:
         success: "Pet successfully created."
       update:
         success: "Pet successfully updated."
+        photo_deleted: "Photo deleted successfully."
       destroy:
         confirm_delete: "Are you sure you want to permanently delete %{name}?"
         confirm_deactivate: "Do you want to deactivate this pet?"
@@ -251,6 +252,9 @@ en:
         photos_label: "Pet photos (maximum 5)"
         photos_help: "Supports PNG, JPEG or WEBP (max 5MB per image)"
         error_header: "Please correct the following errors:"
+        delete_photo: "Delete photo"
+        confirm_delete_photo: "Are you sure you want to delete this photo?"
+        photo_not_found: "Photo not found."
 
     adoption_applications:
       update:

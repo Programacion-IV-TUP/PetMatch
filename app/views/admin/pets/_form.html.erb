@@ -65,24 +65,36 @@
     <!-- Active Storage Photos -->
     <div class="space-y-2" data-controller="file-preview">
       <label class="block text-xs font-semibold text-slate-700">
-        <%= f.label :photos, t('.photos', default: 'Photos') %>
+        <%= f.label :photos, t('.photos_label') %>
       </label>
 
       <!-- Preview container (shows the current or new ones when selected) -->
       <div data-file-preview-target="previewContainer" class="flex flex-wrap items-center gap-2 mb-2">
         <% if pet.photos.attached? %>
           <% pet.photos.each do |photo| %>
-            <%= optimized_image_tag pet.photos.first,
-                        variant_options: { resize_to_fill: [100, 100, { crop: :fill, gravity: :auto }] },
-                        class: "w-20 h-20 rounded-xl object-cover border border-slate-200 shadow-sm",
-                        alt: pet.name %>
+            <% if photo.persisted? %>
+              <div class="relative group w-20 h-20">
+                <%= optimized_image_tag photo,
+                            variant_options: { resize_to_fill: [100, 100, { crop: :fill, gravity: :auto }] },
+                            class: "w-20 h-20 rounded-xl object-cover border border-slate-200 shadow-sm",
+                            alt: pet.name %>
+
+                <!-- Individual photo purge action -->
+                <%= link_to purge_photo_admin_pet_path(pet, photo_id: photo.id),
+                            data: { turbo_method: :delete, turbo_confirm: t('.confirm_delete_photo') },
+                            class: "absolute -top-1.5 -right-1.5 w-5 h-5 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-xs transition cursor-pointer",
+                            title: t('.delete_photo') do %>
+                  ✕
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
       </div>
 
       <div class="flex items-center gap-3">
         <label class="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-semibold text-xs transition border border-emerald-200/60 shadow-2xs">
-          🖼️ <span><%= t('admin.shared.choose_files', default: 'Choose Files') %></span>
+          🖼️ <span><%= t('admin.shared.choose_files') %></span>
           <%= f.file_field :photos, multiple: true, class: "hidden", data: { file_preview_target: "input", action: "change->file-preview#change" } %>
         </label>
 

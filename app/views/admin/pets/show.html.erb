@@ -64,7 +64,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <% @pet.photos.each do |photo| %>
           <div class="h-40 rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60 shadow-xs">
-            <<%= optimized_image_tag photo, 
+            <%= optimized_image_tag photo, 
                             variant_options: { resize_to_limit: [800, 800] },
                             class: "w-full h-full object-cover hover:scale-105 transition duration-300",
                             alt: @pet.name %>

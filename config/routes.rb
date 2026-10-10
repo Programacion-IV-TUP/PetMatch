@@ -35,6 +35,9 @@ namespace :admin do
   resources :adoption_applications, only: %i[index show edit update]
 
   resources :pets do
+    member do
+      delete :purge_photo
+    end
     resources :medical_records, only: %i[new create]
   end
   resources :medical_records, only: %i[index show edit update destroy]
