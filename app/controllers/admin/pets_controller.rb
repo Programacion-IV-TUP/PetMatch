@@ -32,9 +32,11 @@ def index
     end
 
     def create
+      new_photos = params[:pet].delete(:photos)
       @pet = scoped_pets.build(pet_params)
 
       if @pet.save
+        attach_photos(new_photos) if new_photos.present?
         redirect_to admin_pet_path(@pet), notice: t(".success")
       else
         render :new, status: :unprocessable_entity
@@ -87,6 +89,12 @@ def index
     # Finds a pet within the user's scope
     def set_pet
       @pet = scoped_pets.find(params[:id])
+    end
+
+    def attach_photos(photos)
+      photos.reject(&:blank?).each do |photo|
+        @pet.photos.attach(photo) if @pet.photos.count < 5
+      end
     end
 
     def pet_params
