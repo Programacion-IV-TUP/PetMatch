@@ -64,6 +64,7 @@ module Admin
 
     def destroy
       @user.destroy
+      UserMailer.account_deleted(@user).deliver_later
       redirect_to admin_users_path, notice: t(".success")
     end
 

@@ -514,3 +514,8 @@ en:
         greeting: "Hello %{name},"
         body: "We inform you that your PetMatch account has been deactivated by an administrator."
         notice: "From this moment you will not be able to access the platform. If you believe this is an error, please contact our team."
+      account_deleted:
+        subject: "Notice: Your account has been permanently deleted"
+        greeting: "Hello %{name},"
+        body: "We inform you that your PetMatch account and all associated data have been permanently deleted from our platform."
+        notice: "This action is irreversible. If this was a mistake or you have any questions, please contact support immediately."
