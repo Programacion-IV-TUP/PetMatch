@@ -39,12 +39,12 @@ class UserMailer < ApplicationMailer
     end
   end
 
-  def account_deleted(user, locale: I18n.locale)
-    @user = user
+  def account_deleted(email_address, first_name, locale: I18n.locale)
+    @first_name = first_name
 
     with_locale(locale) do
       mail(
-        to: @user.email_address,
+        to: email_address,
         subject: t("mailers.user.account_deleted.subject")
       )
     end
