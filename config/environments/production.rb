@@ -67,12 +67,12 @@ Rails.application.configure do
   # Brevo SMTP Configuration via Environment Variables
   config.action_mailer.smtp_settings = {
     address:              ENV.fetch("SMTP_ADDRESS", "smtp-relay.brevo.com"),
-    port:                 ENV.fetch("SMTP_PORT", 465).to_i,
+    port:                 ENV.fetch("SMTP_PORT", 2525).to_i,
     user_name:            ENV["SMTP_USERNAME"],
     password:             ENV["SMTP_PASSWORD"],
     authentication:       :login,
-    ssl:                  ENV.fetch("SMTP_PORT", 465).to_i == 465,
-    enable_starttls_auto: ENV.fetch("SMTP_PORT", 465).to_i != 465,
+    ssl:                  ENV.fetch("SMTP_PORT", 2525).to_i == 465,
+    enable_starttls_auto: ENV.fetch("SMTP_PORT", 2525).to_i != 465,
     open_timeout:         15,
     read_timeout:         15
   }
