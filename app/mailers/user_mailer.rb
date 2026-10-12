@@ -38,4 +38,15 @@ class UserMailer < ApplicationMailer
       )
     end
   end
+
+  def account_deleted(user, locale: I18n.locale)
+    @user = user
+
+    with_locale(locale) do
+      mail(
+        to: @user.email_address,
+        subject: t("mailers.user.account_deleted.subject")
+      )
+    end
+  end
 end

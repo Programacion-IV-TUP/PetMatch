@@ -516,3 +516,8 @@ es:
         greeting: "Hola %{name},"
         body: "Te informamos que tu cuenta en PetMatch ha sido desactivada por un administrador."
         notice: "A partir de este momento no podrás acceder a la plataforma. Si creés que esto es un error, ponete en contacto con nuestro equipo."
+      account_deleted:
+        subject: "Aviso: Tu cuenta ha sido eliminada"
+        greeting: "Hola %{name},"
+        body: "Te informamos que tu cuenta en PetMatch ha sido eliminada por un administrador."
+        notice: "A partir de este momento no podrás acceder a la plataforma. Si creés que esto es un error, ponete en contacto con nuestro equipo."
